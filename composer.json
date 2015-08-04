@@ -1,0 +1,25 @@
+{
+    "name": "euskadi31/oauth2-server-service-provider",
+    "description": "A OAuth2 Server Service Provider for Silex 2.0",
+    "type": "library",
+    "require": {
+        "silex/silex": "~2.0@dev",
+        "league/oauth2-server": "~4.1.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.7",
+        "leaphub/phpcs-symfony2-standard": "~2.0.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Axel Etcheverry",
+            "email": "axel@etcheverry.biz"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Euskadi31\\Silex\\": "src/"
+        }
+    }
+}
