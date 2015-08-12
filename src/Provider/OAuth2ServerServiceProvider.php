@@ -77,7 +77,7 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
 
             $app['security.entry_point.' . $name . '.oauth2'] = function($app) {
                 return new OAuth2AuthenticationEntryPoint(
-                    $app['oauth2.options.realm_name'],
+                    $app['oauth2.options']['realm_name'],
                     isset($app['logger']) ? $app['logger'] : null
                 );
             };
