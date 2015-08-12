@@ -24,7 +24,7 @@ interface AccessTokenInterface
      *
      * @return string
      */
-    public function getUsername()
+    public function getUsername();
 
     /**
      * Get scopes

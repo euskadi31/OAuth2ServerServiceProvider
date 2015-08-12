@@ -1,5 +1,3 @@
-
-
 <?php
 /*
  * This file is part of the OAuth2ServerServiceProvider.
