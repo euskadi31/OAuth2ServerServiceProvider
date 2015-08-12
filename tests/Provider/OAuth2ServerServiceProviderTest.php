@@ -16,9 +16,20 @@ use Silex\Application;
 
 class OAuth2ServerProviderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @expectedException LogicException
+     */
+    public function testRegisterWithoutSecurityService()
+    {
+        $app = new Application;
+
+        $app->register(new OAuth2ServerServiceProvider);
+    }
+
     public function testRegister()
     {
         $app = new Application;
+        $app['security.token_storage'] = true;
 
         $app->register(new OAuth2ServerServiceProvider);
     }

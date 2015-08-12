@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "silex/silex": "~2.0@dev",
-        "league/oauth2-server": "~4.1.3"
+        "symfony/security": "~2.7"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.7",
@@ -19,7 +19,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Euskadi31\\Silex\\": "src/"
+            "Euskadi31\\Silex\\Provider\\": "src/Provider/",
+            "Euskadi31\\Component\\": "src/Component/"
         }
     }
 }
