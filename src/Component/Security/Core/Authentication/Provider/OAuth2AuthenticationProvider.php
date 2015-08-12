@@ -14,7 +14,7 @@ namespace Euskadi31\Component\Security\Core\Authentication\Provider;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
-use Euskadi31\Component\Security\Http\OAuth2\Provider\UserProviderInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Euskadi31\Component\Security\Storage\AccessTokenProviderInterface;
 use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenExpiredException;
 use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenNotFoundException;
