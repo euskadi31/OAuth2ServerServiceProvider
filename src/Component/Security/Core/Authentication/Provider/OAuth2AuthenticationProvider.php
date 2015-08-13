@@ -84,7 +84,7 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
 
         $token = new OAuth2Token($user->getRoles());
         $token->setAuthenticated(true);
-        $token->setAccessToken($accessToken->get());
+        $token->setAccessToken($accessToken->getId());
         $token->setUser($user);
 
         return $token;
