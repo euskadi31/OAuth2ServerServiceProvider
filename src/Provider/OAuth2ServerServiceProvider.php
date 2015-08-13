@@ -92,7 +92,7 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
                 // the authentication listener id
                 'security.authentication_listener.' . $name . '.oauth2',
                 // the entry point id
-                'security.entry_point.' . $name . '.oauth2',
+                //'security.entry_point.' . $name . '.oauth2',
                 // the position of the listener in the stack
                 'pre_auth'
             ];
