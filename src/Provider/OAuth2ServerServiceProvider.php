@@ -64,6 +64,7 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
                     $app['security.user_provider.default'],
                     $app['security.user_checker'],
                     $app['oauth2.access_token.provider'],
+                    $app['oauth2.client.provider'],
                     $app['oauth2.options']['realm_name']
                 );
             };
