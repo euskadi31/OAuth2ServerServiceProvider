@@ -79,8 +79,8 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
 
         if (empty($accessToken)) {
             throw new OAuthAccessTokenNotFoundException(
-                'Error validating verification code.',
-                400,
+                'The access token could not be found.',
+                401,
                 null,
                 $this->realmName
             );
