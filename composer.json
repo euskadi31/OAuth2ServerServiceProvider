@@ -20,7 +20,8 @@
     "autoload": {
         "psr-4": {
             "Euskadi31\\Silex\\Provider\\": "src/Provider/",
-            "Euskadi31\\Component\\": "src/Component/"
+            "Euskadi31\\Component\\": "src/Component/",
+            "Euskadi31\\Silex\\Controller\\": "src/Controller/"
         }
     }
 }
