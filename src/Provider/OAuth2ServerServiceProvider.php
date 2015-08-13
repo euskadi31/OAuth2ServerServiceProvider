@@ -78,20 +78,12 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
                 );
             };
 
-            /*$app['security.entry_point.' . $name . '.oauth2'] = function($app) {
-                return new OAuth2AuthenticationEntryPoint(
-                    $app['oauth2.options']['realm_name'],
-                    isset($app['logger']) ? $app['logger'] : null
-                );
-            };*/
-
             return [
                 // the authentication provider id
                 'security.authentication_provider.' . $name . '.oauth2',
                 // the authentication listener id
                 'security.authentication_listener.' . $name . '.oauth2',
                 // the entry point id
-                //'security.entry_point.' . $name . '.oauth2',
                 null,
                 // the position of the listener in the stack
                 'pre_auth'

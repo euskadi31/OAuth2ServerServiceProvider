@@ -57,7 +57,7 @@ interface AccessTokenInterface
      *
      * @return boolean
      */
-    public function hasExpired();
+    public function isExpired();
 
     /**
      * Check if access_token is revoked

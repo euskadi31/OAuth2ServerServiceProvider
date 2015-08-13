@@ -86,9 +86,18 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
             );
         }
 
-        if ($accessToken->getExpires() != 0 && $accessToken->getExpires() < time()) {
+        if ($accessToken->isExpired()) {
             throw new OAuthAccessTokenExpiredException(
                 'The access token provided has expired.',
+                401,
+                null,
+                $this->realmName
+            );
+        }
+
+        if ($accessToken->isRevoked()) {
+            throw new OAuthAccessTokenExpiredException(
+                'The access token provided was revoked.',
                 401,
                 null,
                 $this->realmName
