@@ -12,23 +12,37 @@ namespace Euskadi31\Component\Security\Core\Exception;
 
 use Symfony\Component\Security\Core\Exception\InvalidArgumentException;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 /**
  * OAuthInvalidAccessTokenException
  *
  * @author Axel Etcheverry <axel@etcheverry.biz>
  */
-class OAuthInvalidAccessTokenException extends InvalidArgumentException implements OAuthExceptionInterface
+class OAuthInvalidAccessTokenException extends InvalidArgumentException implements OAuthExceptionInterface/*, HttpExceptionInterface*/
 {
+    /**
+     * @var integer
+     */
+    private $statusCode;
+
+    /**
+     * @var array
+     */
+    private $headers;
+
     /**
      *
      * @param string         $message
      * @param integer        $code
      * @param Exception|null $previous
      */
-    public function __construct($message = '', $code = 401, Exception $previous = null)
+    public function __construct($message = '', $code = 401, Exception $previous = null, $headers = [])
     {
         parent::__construct($message, $code, $previous);
+
+        $this->headers      = $headers;
+        $this->statusCode   = $code;
     }
 
     /**
@@ -45,5 +59,21 @@ class OAuthInvalidAccessTokenException extends InvalidArgumentException implemen
     public function getScopes()
     {
         return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
     }
 }

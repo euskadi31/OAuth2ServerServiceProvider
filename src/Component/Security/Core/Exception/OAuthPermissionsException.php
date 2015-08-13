@@ -12,18 +12,29 @@ namespace Euskadi31\Component\Security\Core\Exception;
 
 use Symfony\Component\Security\Core\Exception\InsufficientAuthenticationException;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 /**
  * OAuthPermissionsException
  *
  * @author Axel Etcheverry <axel@etcheverry.biz>
  */
-class OAuthPermissionsException extends InsufficientAuthenticationException implements OAuthExceptionInterface
+class OAuthPermissionsException extends InsufficientAuthenticationException implements OAuthExceptionInterface/*, HttpExceptionInterface*/
 {
     /**
      * @var array
      */
     protected $scopes;
+
+    /**
+     * @var integer
+     */
+    private $statusCode;
+
+    /**
+     * @var array
+     */
+    private $headers;
 
     /**
      *
@@ -32,11 +43,13 @@ class OAuthPermissionsException extends InsufficientAuthenticationException impl
      * @param Exception|null $previous
      * @param array          $scope
      */
-    public function __construct($message = '', $code = 403, Exception $previous = null, $scope = [])
+    public function __construct($message = '', $code = 403, Exception $previous = null, $scope = [], $headers = [])
     {
         parent::__construct($message, $code, $previous);
 
-        $this->scopes = $scopes;
+        $this->scopes       = $scopes;
+        $this->headers      = $headers;
+        $this->statusCode   = $code;
     }
 
     /**
@@ -61,5 +74,21 @@ class OAuthPermissionsException extends InsufficientAuthenticationException impl
     public function getScopes()
     {
         return $this->scopes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
     }
 }

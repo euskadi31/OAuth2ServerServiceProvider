@@ -71,6 +71,59 @@ class OAuth2AuthenticationListener implements ListenerInterface
     }
 
     /**
+     * Quoted string for authenticate header
+     *
+     * @param  string $str
+     * @return string
+     */
+    /*protected function quotedString($str)
+    {
+        $str = preg_replace('~
+          [^
+            \x21-\x7E
+            \x80-\xFF
+            \ \t
+          ]
+          ~x', '', $str);
+        $str = addcslashes($str, '"\\');
+
+        return '"' . $str . '"';
+    }*/
+
+    /**
+     * get authenticate headers
+     *
+     * @return array
+     */
+    /*protected function getAuthenticateHeaders($authException = null)
+    {
+        $authenticateHeader = sprintf('Bearer realm=%s', $this->quotedString($this->realmName));
+
+        if ($authException instanceof OAuthExceptionInterface) {
+            $authenticateHeader .= sprintf(', error=%s', $this->quotedString($authException->getErrorCode()));
+            $authenticateHeader .= sprintf(', error_description=%s', $this->quotedString($authException->getMessage()));
+
+            $scopes = $authException->getScopes();
+
+            if (!empty($scopes)) {
+                $authenticateHeader .= sprintf(', scope=%s', $this->quotedString(implode(' ', $scopes)));
+            }
+        }
+
+        if (null !== $this->logger) {
+            $this->logger->debug('WWW-Authenticate header sent.', [
+                'header' => $authenticateHeader
+            ]);
+        }
+
+        return [
+            'Cache-Control'     => 'no-store',
+            'Pragma'            => 'no-cache',
+            'WWW-Authenticate'  => $authenticateHeader
+        ];
+    }*/
+
+    /**
      * Handles OAuth2 authentication.
      *
      * @param GetResponseEvent $event A GetResponseEvent instance
@@ -128,30 +181,32 @@ class OAuth2AuthenticationListener implements ListenerInterface
             $accessToken = $request->request->get('access_token');
         }
 
-        try {
-            if (empty($accessToken)) {
-                throw new OAuthAccessTokenNotFoundException(
-                    'An access token is required to request this resource.',
-                    400
-                );
-            }
+        if (empty($accessToken)) {
+            throw new OAuthAccessTokenNotFoundException(
+                'An access token is required to request this resource.',
+                400
+            );
+        }
 
-            if (null !== $this->logger) {
-                $this->logger->info('OAuth2 authentication Authorization header found for user.');
-            }
+        if (null !== $this->logger) {
+            $this->logger->info('OAuth2 authentication Authorization header found for user.');
+        }
 
-            $token = new OAuth2Token();
-            $token->setAccessToken($accessToken);
+        $token = new OAuth2Token();
+        $token->setAccessToken($accessToken);
 
-            $token = $this->authenticationManager->authenticate($token);
+        $token = $this->authenticationManager->authenticate($token);
 
-            return $this->tokenStorage->setToken($token);
+        return $this->tokenStorage->setToken($token);
+
+        /*try {
+
         } catch (AuthenticationException $e) {
             if (null !== $this->logger) {
                 $this->logger->info('OAuth2 authentication failed for user.', ['exception' => $e]);
             }
 
             $event->setResponse($this->authenticationEntryPoint->start($request, $e));
-        }
+        }*/
     }
 }

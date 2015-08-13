@@ -12,23 +12,37 @@ namespace Euskadi31\Component\Security\Core\Exception;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 /**
  * OAuthAccessTokenNotFoundException
  *
  * @author Axel Etcheverry <axel@etcheverry.biz>
  */
-class OAuthAccessTokenNotFoundException extends AuthenticationCredentialsNotFoundException implements OAuthExceptionInterface
+class OAuthAccessTokenNotFoundException extends AuthenticationCredentialsNotFoundException implements OAuthExceptionInterface/*, HttpExceptionInterface*/
 {
+    /**
+     * @var integer
+     */
+    private $statusCode;
+
+    /**
+     * @var array
+     */
+    private $headers;
+
     /**
      *
      * @param string         $message
      * @param integer        $code
      * @param Exception|null $previous
      */
-    public function __construct($message = '', $code = 401, Exception $previous = null)
+    public function __construct($message = '', $code = 401, Exception $previous = null, $headers = [])
     {
         parent::__construct($message, $code, $previous);
+
+        $this->headers      = $headers;
+        $this->statusCode   = $code;
     }
 
     /**
@@ -53,5 +67,21 @@ class OAuthAccessTokenNotFoundException extends AuthenticationCredentialsNotFoun
     public function getScopes()
     {
         return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
     }
 }
