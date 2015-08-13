@@ -18,10 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * OAuth2 Authentication Listener
@@ -33,21 +33,40 @@ class OAuth2AuthenticationListener implements ListenerInterface
     /**
      * @var \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
      */
-    protected $tokenStorage;
+    private $tokenStorage;
 
     /**
      * @var \Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface
      */
-    protected $authenticationManager;
+    private $authenticationManager;
 
     /**
-     * @param TokenStorageInterface          $tokenStorage          A TokenStorageInterface instance
-     * @param AuthenticationManagerInterface $authenticationManager An AuthenticationManagerInterface instance
+     * @var \Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
      */
-    public function __construct(TokenStorageInterface $tokenStorage, AuthenticationManagerInterface $authenticationManager)
+    private $authenticationEntryPoint;
+
+    /**
+     * @var Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @param TokenStorageInterface             $tokenStorage             A TokenStorageInterface instance
+     * @param AuthenticationManagerInterface    $authenticationManager    An AuthenticationManagerInterface instance
+     * @param AuthenticationEntryPointInterface $authenticationEntryPoint
+     * @param LoggerInterface                   $logger
+     */
+    public function __construct(
+        TokenStorageInterface $tokenStorage,
+        AuthenticationManagerInterface $authenticationManager,
+        AuthenticationEntryPointInterface $authenticationEntryPoint,
+        LoggerInterface $logger = null
+    )
     {
         $this->tokenStorage             = $tokenStorage;
         $this->authenticationManager    = $authenticationManager;
+        $this->authenticationEntryPoint = $authenticationEntryPoint;
+        $this->logger                   = $logger;
     }
 
     /**
@@ -109,38 +128,26 @@ class OAuth2AuthenticationListener implements ListenerInterface
         }
 
         if (empty($accessToken)) {
-            $response = new Response();
-            $response->setStatusCode(400);
-            $response->setContent(json_encode([
-                'error' => [
-                    'message'   => 'Invalid OAuth access token.',
-                    'type'      => 'OAuthException',
-                    'code'      => 400
-                ]
-            ]));
-            $event->setResponse($response);
-
             return;
+        }
+
+        if (null !== $this->logger) {
+            $this->logger->info('OAuth2 authentication Authorization header found for user.');
         }
 
         $token = new OAuth2Token();
         $token->setAccessToken($accessToken);
 
         try {
-            $returnValue = $this->authenticationManager->authenticate($token);
+            $token = $this->authenticationManager->authenticate($token);
 
-            return $this->tokenStorage->setToken($returnValue);
+            return $this->tokenStorage->setToken($token);
         } catch (AuthenticationException $e) {
-            $response = new Response();
-            $response->setStatusCode(403);
-            $response->setContent(json_encode([
-                'error' => [
-                    'message'   => 'Invalid OAuth access token.',
-                    'type'      => 'OAuthException',
-                    'code'      => 403
-                ]
-            ]));
-            $event->setResponse($response);
+            if (null !== $this->logger) {
+                $this->logger->info('OAuth2 authentication failed for user.', ['exception' => $e]);
+            }
+
+            $event->setResponse($this->authenticationEntryPoint->start($request, $e));
         }
     }
 }

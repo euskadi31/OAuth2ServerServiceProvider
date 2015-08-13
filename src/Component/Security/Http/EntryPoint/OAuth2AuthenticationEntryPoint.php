@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
+use Euskadi31\Component\Security\Core\Exception\OAuthExceptionInterface;
 
 /**
  * OAuth2AuthenticationEntryPoint starts an OAuth2 authentication.
@@ -58,16 +59,21 @@ class OAuth2AuthenticationEntryPoint implements AuthenticationEntryPointInterfac
 
         $authenticateHeader = sprintf('Bearer realm=%s', $quotedString($this->realmName));
 
-        // OAuthPermissionsException
-        // OAuthInvalidTokenException
-        // OAuthForbiddenException
-        if ($authException instanceof OAuthException) {
-            $authenticateHeader .= sprintf(', error="%s"', $authException->getErrorCode());
+        if ($authException instanceof OAuthExceptionInterface) {
+            $authenticateHeader .= sprintf(', error=%s', $quotedString($authException->getErrorCode()));
             $authenticateHeader .= sprintf(', error_description=%s', $quotedString($authException->getMessage()));
+
+            $scopes = $authException->getScopes();
+
+            if (!empty($scopes)) {
+                $authenticateHeader .= sprintf(', scope=%s', $quotedString(implode(' ', $scopes)));
+            }
         }
 
         if (null !== $this->logger) {
-            $this->logger->debug('WWW-Authenticate header sent.', array('header' => $authenticateHeader));
+            $this->logger->debug('WWW-Authenticate header sent.', [
+                'header' => $authenticateHeader
+            ]);
         }
 
         $response = new Response();

@@ -18,6 +18,13 @@ namespace Euskadi31\Component\Security\Storage;
 interface AccessTokenInterface
 {
     /**
+     * Get access token
+     *
+     * @return string
+     */
+    public function getId();
+
+    /**
      * Get client id
      *
      * @return string

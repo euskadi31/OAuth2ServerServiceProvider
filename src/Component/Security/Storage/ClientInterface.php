@@ -22,14 +22,14 @@ interface ClientInterface
      *
      * @return string
      */
-    public function getClientId();
+    public function getId();
 
     /**
      * Get the client secret
      *
      * @return string
      */
-    public function getClientSecret();
+    public function getSecret();
 
     /**
      * Get the client name
