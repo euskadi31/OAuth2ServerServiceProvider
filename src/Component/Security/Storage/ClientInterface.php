@@ -44,4 +44,18 @@ interface ClientInterface
      * @return string
      */
     public function getRedirectUri();
+
+    /**
+     * Check if client is enabled
+     *
+     * @return boolean
+     */
+    public function isEnabled();
+
+    /**
+     * Check if client is locked
+     *
+     * @return boolean
+     */
+    public function isLocked();
 }
