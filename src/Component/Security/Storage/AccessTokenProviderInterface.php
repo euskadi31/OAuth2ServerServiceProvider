@@ -22,7 +22,6 @@ interface AccessTokenProviderInterface
      *
      * @param  string $accessToken
      * @return AccessTokenInterface
-     * @throws Euskadi31\Component\Security\Core\Exception\OAuthException
      */
     public function get($accessToken);
 }
