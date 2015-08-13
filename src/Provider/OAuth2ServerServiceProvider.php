@@ -68,7 +68,7 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
             };
 
             // define the authentication listener object
-            $app['security.authentication_listener.' . $name . '.oauth2'] = function($app) {
+            $app['security.authentication_listener.' . $name . '.oauth2'] = function($app) use ($name) {
                 return new OAuth2AuthenticationListener(
                     $app['security.token_storage'],
                     $app['security.authentication_manager'],
