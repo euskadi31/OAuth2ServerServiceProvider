@@ -20,11 +20,18 @@ namespace Euskadi31\Component\Security\Storage;
 interface AccessTokenInterface
 {
     /**
-     * Get username of owner
+     * Get client id
      *
      * @return string
      */
-    public function getUsername();
+    public function getClient();
+
+    /**
+     * Get user id
+     *
+     * @return integer
+     */
+    public function getUser();
 
     /**
      * Get scopes
@@ -39,4 +46,18 @@ interface AccessTokenInterface
      * @return integer
      */
     public function getExpires();
+
+    /**
+     * Check if access_token has expired
+     *
+     * @return boolean
+     */
+    public function hasExpired();
+
+    /**
+     * Check if access_token is revoked
+     *
+     * @return boolean
+     */
+    public function isRevoked();
 }
