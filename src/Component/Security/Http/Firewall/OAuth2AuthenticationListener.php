@@ -53,14 +53,14 @@ class OAuth2AuthenticationListener implements ListenerInterface
     /**
      * @param TokenStorageInterface          $tokenStorage          A TokenStorageInterface instance
      * @param AuthenticationManagerInterface $authenticationManager An AuthenticationManagerInterface instance
-     * @param LoggerInterface                $logger
      * @param string                         $realmName
+     * @param LoggerInterface                $logger
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
         AuthenticationManagerInterface $authenticationManager,
-        LoggerInterface $logger = null,
-        $realmName
+        $realmName,
+        LoggerInterface $logger = null
     )
     {
         $this->tokenStorage             = $tokenStorage;
@@ -73,7 +73,7 @@ class OAuth2AuthenticationListener implements ListenerInterface
      * Handles OAuth2 authentication.
      *
      * @param GetResponseEvent $event A GetResponseEvent instance
-     * @throws \RuntimeException
+     * @throws OAuthExceptionInterface
      * @return void
      */
     final public function handle(GetResponseEvent $event)
@@ -90,7 +90,8 @@ class OAuth2AuthenticationListener implements ListenerInterface
             if (function_exists('apache_request_headers')) {
                 $headers = apache_request_headers();
 
-                // Server-side fix for bug in old shitty Android versions (a nice side-effect of this fix means we don't care about capitalization for Authorization)
+                // Server-side fix for bug in old shitty Android versions (a nice side-effect of
+                // this fix means we don't care about capitalization for Authorization)
                 $headers = array_combine(
                     array_map(
                         'ucwords',

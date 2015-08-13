@@ -28,6 +28,7 @@ class OAuthAccessTokenNotFoundException extends AuthenticationCredentialsNotFoun
      * @param string         $message
      * @param integer        $code
      * @param Exception|null $previous
+     * @param string         $realmName
      */
     public function __construct($message = '', $code = 401, Exception $previous = null, $realmName = 'API')
     {

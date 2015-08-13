@@ -52,6 +52,7 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
      * @param UserProviderInterface        $userProvider        The user provider.
      * @param UserCheckerInterface         $userChecker
      * @param AccessTokenProviderInterface $accessTokenProvider
+     * @param string                       $realmName
      */
     public function __construct(
         UserProviderInterface $userProvider,
