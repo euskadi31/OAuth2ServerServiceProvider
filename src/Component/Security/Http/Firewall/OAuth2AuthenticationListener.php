@@ -20,7 +20,6 @@ use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterfac
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
-use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Psr\Log\LoggerInterface;
 use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenNotFoundException;
 
@@ -42,11 +41,6 @@ class OAuth2AuthenticationListener implements ListenerInterface
     private $authenticationManager;
 
     /**
-     * @var \Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
-     */
-    private $authenticationEntryPoint;
-
-    /**
      * @var Psr\Log\LoggerInterface
      */
     private $logger;
@@ -57,15 +51,14 @@ class OAuth2AuthenticationListener implements ListenerInterface
     private $realmName;
 
     /**
-     * @param TokenStorageInterface             $tokenStorage             A TokenStorageInterface instance
-     * @param AuthenticationManagerInterface    $authenticationManager    An AuthenticationManagerInterface instance
-     * @param AuthenticationEntryPointInterface $authenticationEntryPoint
-     * @param LoggerInterface                   $logger
+     * @param TokenStorageInterface          $tokenStorage          A TokenStorageInterface instance
+     * @param AuthenticationManagerInterface $authenticationManager An AuthenticationManagerInterface instance
+     * @param LoggerInterface                $logger
+     * @param string                         $realmName
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
         AuthenticationManagerInterface $authenticationManager,
-        AuthenticationEntryPointInterface $authenticationEntryPoint,
         LoggerInterface $logger = null,
         $realmName
     )
