@@ -65,7 +65,6 @@ class OAuth2AuthenticationListener implements ListenerInterface
     {
         $this->tokenStorage             = $tokenStorage;
         $this->authenticationManager    = $authenticationManager;
-        $this->authenticationEntryPoint = $authenticationEntryPoint;
         $this->logger                   = $logger;
         $this->realmName                = $realmName;
     }
