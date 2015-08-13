@@ -22,6 +22,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Psr\Log\LoggerInterface;
+use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenNotFoundException;
 
 /**
  * OAuth2 Authentication Listener
@@ -127,18 +128,21 @@ class OAuth2AuthenticationListener implements ListenerInterface
             $accessToken = $request->request->get('access_token');
         }
 
-        if (empty($accessToken)) {
-            return;
-        }
-
-        if (null !== $this->logger) {
-            $this->logger->info('OAuth2 authentication Authorization header found for user.');
-        }
-
-        $token = new OAuth2Token();
-        $token->setAccessToken($accessToken);
-
         try {
+            if (empty($accessToken)) {
+                throw new OAuthAccessTokenNotFoundException(
+                    'An access token is required to request this resource.',
+                    400
+                );
+            }
+
+            if (null !== $this->logger) {
+                $this->logger->info('OAuth2 authentication Authorization header found for user.');
+            }
+
+            $token = new OAuth2Token();
+            $token->setAccessToken($accessToken);
+
             $token = $this->authenticationManager->authenticate($token);
 
             return $this->tokenStorage->setToken($token);
