@@ -27,11 +27,11 @@ interface AccessTokenInterface
     public function getClient();
 
     /**
-     * Get user id
+     * Get username of owner
      *
-     * @return integer
+     * @return string
      */
-    public function getUser();
+    public function getUsername();
 
     /**
      * Get scopes
