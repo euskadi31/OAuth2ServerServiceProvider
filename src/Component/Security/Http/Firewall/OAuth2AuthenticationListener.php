@@ -52,6 +52,11 @@ class OAuth2AuthenticationListener implements ListenerInterface
     private $logger;
 
     /**
+     * @var string
+     */
+    private $realmName;
+
+    /**
      * @param TokenStorageInterface             $tokenStorage             A TokenStorageInterface instance
      * @param AuthenticationManagerInterface    $authenticationManager    An AuthenticationManagerInterface instance
      * @param AuthenticationEntryPointInterface $authenticationEntryPoint
@@ -61,6 +66,7 @@ class OAuth2AuthenticationListener implements ListenerInterface
         TokenStorageInterface $tokenStorage,
         AuthenticationManagerInterface $authenticationManager,
         AuthenticationEntryPointInterface $authenticationEntryPoint,
+        $realmName,
         LoggerInterface $logger = null
     )
     {
@@ -68,6 +74,7 @@ class OAuth2AuthenticationListener implements ListenerInterface
         $this->authenticationManager    = $authenticationManager;
         $this->authenticationEntryPoint = $authenticationEntryPoint;
         $this->logger                   = $logger;
+        $this->realmName                = $realmName;
     }
 
     /**
@@ -184,7 +191,9 @@ class OAuth2AuthenticationListener implements ListenerInterface
         if (empty($accessToken)) {
             throw new OAuthAccessTokenNotFoundException(
                 'An access token is required to request this resource.',
-                400
+                400,
+                null,
+                $this->realmName
             );
         }
 

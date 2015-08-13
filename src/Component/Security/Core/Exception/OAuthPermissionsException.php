@@ -19,22 +19,9 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
  *
  * @author Axel Etcheverry <axel@etcheverry.biz>
  */
-class OAuthPermissionsException extends InsufficientAuthenticationException implements OAuthExceptionInterface/*, HttpExceptionInterface*/
+class OAuthPermissionsException extends InsufficientAuthenticationException implements OAuthExceptionInterface, HttpExceptionInterface
 {
-    /**
-     * @var array
-     */
-    protected $scopes;
-
-    /**
-     * @var integer
-     */
-    private $statusCode;
-
-    /**
-     * @var array
-     */
-    private $headers;
+    use OAuthExceptionTrait;
 
     /**
      *
@@ -43,13 +30,14 @@ class OAuthPermissionsException extends InsufficientAuthenticationException impl
      * @param Exception|null $previous
      * @param array          $scope
      */
-    public function __construct($message = '', $code = 403, Exception $previous = null, $scope = [], $headers = [])
+    public function __construct($message = '', $code = 403, Exception $previous = null, $scope = [], $realmName = 'API')
     {
         parent::__construct($message, $code, $previous);
 
         $this->scopes       = $scopes;
-        $this->headers      = $headers;
         $this->statusCode   = $code;
+        $this->errorCode    = 'insufficient_scope';
+        $this->realmName    = $realmName;
     }
 
     /**
@@ -58,37 +46,5 @@ class OAuthPermissionsException extends InsufficientAuthenticationException impl
     public function getMessageKey()
     {
         return 'The request requires higher privileges than provided by the access token.';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getErrorCode()
-    {
-        return 'insufficient_scope';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getScopes()
-    {
-        return $this->scopes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getStatusCode()
-    {
-        return $this->statusCode;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
     }
 }

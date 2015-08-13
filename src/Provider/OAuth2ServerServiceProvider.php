@@ -63,7 +63,8 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
                 return new OAuth2AuthenticationProvider(
                     $app['security.user_provider.default'],
                     $app['security.user_checker'],
-                    $app['oauth2.access_token.provider']
+                    $app['oauth2.access_token.provider'],
+                    $app['oauth2.options']['realm_name']
                 );
             };
 
@@ -73,7 +74,8 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
                     $app['security.token_storage'],
                     $app['security.authentication_manager'],
                     $app['security.entry_point.' . $name . '.oauth2'],
-                    isset($app['logger']) ? $app['logger'] : null
+                    isset($app['logger']) ? $app['logger'] : null,
+                    $app['oauth2.options']['realm_name']
                 );
             };
 

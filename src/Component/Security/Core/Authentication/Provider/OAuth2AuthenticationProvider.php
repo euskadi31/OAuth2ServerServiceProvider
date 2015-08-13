@@ -44,6 +44,11 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
     protected $accessTokenProvider;
 
     /**
+     * @var string
+     */
+    private $realmName;
+
+    /**
      * @param UserProviderInterface        $userProvider        The user provider.
      * @param UserCheckerInterface         $userChecker
      * @param AccessTokenProviderInterface $accessTokenProvider
@@ -51,12 +56,14 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
     public function __construct(
         UserProviderInterface $userProvider,
         UserCheckerInterface $userChecker,
-        AccessTokenProviderInterface $accessTokenProvider
+        AccessTokenProviderInterface $accessTokenProvider,
+        $realmName
     )
     {
         $this->userProvider         = $userProvider;
         $this->userChecker          = $userChecker;
         $this->accessTokenProvider  = $accessTokenProvider;
+        $this->realmName            = $realmName;
     }
 
     /**
@@ -71,11 +78,21 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
         $accessToken = $this->accessTokenProvider->get($token->getAccessToken());
 
         if (empty($accessToken)) {
-            throw new OAuthAccessTokenNotFoundException('Error validating verification code.', 400);
+            throw new OAuthAccessTokenNotFoundException(
+                'Error validating verification code.',
+                400,
+                null,
+                $this->realmName
+            );
         }
 
         if ($accessToken->getExpires() != 0 && $accessToken->getExpires() < time()) {
-            throw new OAuthAccessTokenExpiredException('The access token provided has expired.', 401);
+            throw new OAuthAccessTokenExpiredException(
+                'The access token provided has expired.',
+                401,
+                null,
+                $this->realmName
+            );
         }
 
         // check scope

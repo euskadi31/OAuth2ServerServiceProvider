@@ -19,17 +19,9 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
  *
  * @author Axel Etcheverry <axel@etcheverry.biz>
  */
-class OAuthAccessTokenExpiredException extends CredentialsExpiredException implements OAuthExceptionInterface/*, HttpExceptionInterface*/
+class OAuthAccessTokenExpiredException extends CredentialsExpiredException implements OAuthExceptionInterface, HttpExceptionInterface
 {
-    /**
-     * @var integer
-     */
-    private $statusCode;
-
-    /**
-     * @var array
-     */
-    private $headers;
+    use OAuthExceptionTrait;
 
     /**
      *
@@ -37,12 +29,13 @@ class OAuthAccessTokenExpiredException extends CredentialsExpiredException imple
      * @param integer        $code
      * @param Exception|null $previous
      */
-    public function __construct($message = '', $code = 401, Exception $previous = null, $headers = [])
+    public function __construct($message = '', $code = 401, Exception $previous = null, $realmName = 'API')
     {
         parent::__construct($message, $code, $previous);
 
-        $this->headers      = $headers;
         $this->statusCode   = $code;
+        $this->errorCode    = 'invalid_token';
+        $this->realmName    = $realmName;
     }
 
     /**
@@ -51,38 +44,6 @@ class OAuthAccessTokenExpiredException extends CredentialsExpiredException imple
     public function getMessageKey()
     {
         return 'The access token provided has expired.';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getErrorCode()
-    {
-        return 'invalid_token';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getScopes()
-    {
-        return [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getStatusCode()
-    {
-        return $this->statusCode;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
     }
 }
 
