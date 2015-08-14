@@ -58,8 +58,7 @@ class TokenControllerProvider implements ControllerProviderInterface
                 throw new OAuthUnauthorizedClientException();
             }
 
-            return $grantType->handle($request);
-
+            return $app->json($grantType->handle($request));
         });
 
         return $controllers;

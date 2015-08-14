@@ -47,7 +47,17 @@ class PasswordGrantType implements GrantTypeInterface
             throw new OAuthInvalidRequestException('Missing password parameter.');
         }
 
+        $data = [
+            'access_token'  => "2YotnFZFEjr1zCsicMWpAA",
+            'token_type'    => 'example',
+            'expires_in'    => 3600,
+            'refresh_token' => 'tGzv3JOkF0XG5Qx2TlKWIA'
+        ];
 
-        return new Response('grant_type=password');
+        $response new Response(json_encode($data), 200, [
+            'Content-Type'  => 'application/json;charset=UTF-8',
+            'Cache-Control' => 'no-store',
+            'Pragma'        => 'no-cache',
+        ]);
     }
 }
