@@ -10,6 +10,9 @@
 
 namespace Euskadi31\Component\Security\GrantType;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * AuthorizationCodeGrantType
  *
@@ -23,5 +26,13 @@ class AuthorizationCodeGrantType implements GrantTypeInterface
     public function getName()
     {
         return 'authorization_code';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handle(Request $request)
+    {
+        return new Response();
     }
 }
