@@ -10,6 +10,8 @@
 
 namespace Euskadi31\Component\Security\Storage;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+
 /**
  * AccessTokenProviderInterface
  *
@@ -24,4 +26,14 @@ interface AccessTokenProviderInterface
      * @return AccessTokenInterface
      */
     public function get($accessToken);
+
+    /**
+     * Create access token
+     *
+     * @param  UserInterface   $user
+     * @param  ClientInterface $client
+     * @param  array|null      $scope
+     * @return AccessTokenInterface
+     */
+    public function create(UserInterface $user, ClientInterface $client, $scope = null);
 }

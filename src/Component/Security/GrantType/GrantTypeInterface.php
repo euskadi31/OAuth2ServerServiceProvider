@@ -11,6 +11,7 @@
 namespace Euskadi31\Component\Security\GrantType;
 
 use Symfony\Component\HttpFoundation\Request;
+use Euskadi31\Component\Security\Storage\ClientInterface;
 
 /**
  * GrantTypeInterface
@@ -32,5 +33,5 @@ interface GrantTypeInterface
      * @param  Request $request
      * @return Response
      */
-    public function handle(Request $request);
+    public function handle(Request $request, ClientInterface $client);
 }

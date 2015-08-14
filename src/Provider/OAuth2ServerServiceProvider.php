@@ -56,14 +56,6 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
             throw new LogicException('The "auth_code" provider entry is not registered.');
         };
 
-        $app['oauth2.grant_type.password'] = function($app) {
-            return new GrantType\PasswordGrantType();
-        };
-
-        $app['oauth2.grant_type.authorization_code'] = function($app) {
-            return new GrantType\AuthorizationCodeGrantType();
-        };
-
         $app['oauth2.grant_types'] = function($app) {
             $collection = new GrantType\GrantTypeCollection();
 
@@ -90,6 +82,18 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
 
         // OAuth2 Authentication Provider
         $app['security.authentication_listener.factory.oauth2'] = $app->protect(function($name, $options) use ($app) {
+
+            $app['oauth2.grant_type.password'] = function($app) use ($name) {
+                return new GrantType\PasswordGrantType(
+                    $app['security.authentication_manager'],
+                    $name,
+                    $app['oauth2.access_token.provider']
+                );
+            };
+
+            $app['oauth2.grant_type.authorization_code'] = function($app) {
+                return new GrantType\AuthorizationCodeGrantType();
+            };
 
             // define the authentication provider object
             $app['security.authentication_provider.' . $name . '.oauth2'] = function($app) {
