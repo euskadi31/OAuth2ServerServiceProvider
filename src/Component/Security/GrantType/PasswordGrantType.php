@@ -33,6 +33,6 @@ class PasswordGrantType implements GrantTypeInterface
      */
     public function handle(Request $request)
     {
-        return new Response();
+        return new Response('grant_type=password');
     }
 }
