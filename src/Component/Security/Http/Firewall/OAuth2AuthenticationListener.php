@@ -129,12 +129,13 @@ class OAuth2AuthenticationListener implements ListenerInterface
         }
 
         if (empty($accessToken)) {
-            throw new OAuthAccessTokenNotFoundException(
+            return null;
+            /*throw new OAuthAccessTokenNotFoundException(
                 'An access token is required to request this resource.',
                 400,
                 null,
                 $this->realmName
-            );
+            );*/
         }
 
         if (null !== $this->logger) {
