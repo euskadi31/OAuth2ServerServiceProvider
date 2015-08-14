@@ -145,6 +145,10 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
 
         $accessToken = $this->accessTokenProvider->get($token->getAccessToken());
 
+        if (empty($accessToken)) {
+            return null;
+        }
+
         $this->checkAccessToken($accessToken);
 
         $client = $this->clientProvider->get($accessToken->getClient());
