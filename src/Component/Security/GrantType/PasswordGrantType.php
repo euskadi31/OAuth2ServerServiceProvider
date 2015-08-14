@@ -54,10 +54,10 @@ class PasswordGrantType implements GrantTypeInterface
             'refresh_token' => 'tGzv3JOkF0XG5Qx2TlKWIA'
         ];
 
-        $response new Response(json_encode($data), 200, [
+        return new Response(json_encode($data), 200, [
             'Content-Type'  => 'application/json;charset=UTF-8',
             'Cache-Control' => 'no-store',
-            'Pragma'        => 'no-cache',
+            'Pragma'        => 'no-cache'
         ]);
     }
 }
