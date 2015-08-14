@@ -32,7 +32,7 @@ class AuthorizeControllerProvider implements ControllerProviderInterface
         $controllers->get('/oauth/authorize', function(Request $request) use ($app) {
 
             return '';
-        });
+        })->secure('IS_AUTHENTICATED_FULLY');
 
         return $controllers;
     }
