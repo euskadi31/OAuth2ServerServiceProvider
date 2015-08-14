@@ -83,7 +83,7 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
         // OAuth2 Authentication Provider
         $app['security.authentication_listener.factory.oauth2'] = $app->protect(function($name, $options) use ($app) {
 
-            $app['security.authentication_provider.' . $name . '.oauth2'] = $app['security.authentication_provider.dao._proto']($name);
+            $app['security.authentication_provider.' . $name . '.dao'] = $app['security.authentication_provider.dao._proto']($name);
 
             $app['oauth2.grant_type.password'] = function($app) use ($name) {
                 return new GrantType\PasswordGrantType(
