@@ -15,7 +15,7 @@ use Silex\Api\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Euskadi31\Component\Security\Core\Exception\OAuthInvalidRequestException;
 use Euskadi31\Component\Security\Core\Exception\OAuthInvalidClientException;
-use Euskadi31\Component\Security\Core\Exception\OAuthUnsupportedGrantTypeException;
+use Euskadi31\Component\Security\Core\Exception\OAuthUnauthorizedClientException;
 
 /**
  * TokenControllerProvider
@@ -53,6 +53,10 @@ class TokenControllerProvider implements ControllerProviderInterface
             }
 
             $grantType = $app['oauth2.grant_types']->get($grantType);
+
+            if (!in_array($grantType->getName(), $client->getGrantTypes())) {
+                throw new OAuthUnauthorizedClientException();
+            }
 
             return $grantType->handle($request);
 
