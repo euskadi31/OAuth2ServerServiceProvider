@@ -54,7 +54,7 @@ class TokenControllerProvider implements ControllerProviderInterface
 
             $grantType = $app['oauth2.grant_types']->get($grantType);
 
-
+            return $grantType->handle($request);
 
         });
 
