@@ -12,6 +12,7 @@ namespace Euskadi31\Component\Security\GrantType;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Euskadi31\Component\Security\Storage\ClientInterface;
 
 /**
  * AuthorizationCodeGrantType
@@ -31,7 +32,7 @@ class AuthorizationCodeGrantType implements GrantTypeInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(Request $request)
+    public function handle(Request $request, ClientInterface $client)
     {
         return new Response();
     }
