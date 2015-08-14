@@ -16,6 +16,7 @@ use LogicException;
 use Euskadi31\Component\Security\Core\Authentication\Provider\OAuth2AuthenticationProvider;
 use Euskadi31\Component\Security\Http\EntryPoint\OAuth2AuthenticationEntryPoint;
 use Euskadi31\Component\Security\Http\Firewall\OAuth2AuthenticationListener;
+use Euskadi31\Component\Security\GrantType;
 
 /**
  * OAuth2 server integration for Silex.
@@ -35,7 +36,7 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
 
         $app['oauth2.options'] = [
             'realm_name'        => 'Api',
-            'grant_types'       => ['authorization_code'],
+            'grant_types'       => ['authorization_code', 'password'],
             'access_token_ttl'  => 172800
         ];
 
@@ -53,6 +54,38 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
 
         $app['oauth2.auth_code.provider'] = function($app) {
             throw new LogicException('The "auth_code" provider entry is not registered.');
+        };
+
+        $app['oauth2.grant_type.password'] = function($app) {
+            return new GrantType\PasswordGrantType();
+        };
+
+        $app['oauth2.grant_type.authorization_code'] = function($app) {
+            return new GrantType\AuthorizationCodeGrantType();
+        };
+
+        $app['oauth2.grant_types'] = function($app) {
+            $collection = new GrantType\GrantTypeCollection();
+
+            foreach ($app['oauth2.options']['grant_types'] as $grantType) {
+                $key = 'oauth2.grant_type.' . $grantType;
+
+                if (!isset($app[$key])) {
+                    throw new LogicException(sprintf('Invalid grant_type "%s".', $grantType));
+                }
+
+                $grantType = $app[$key];
+
+                if (!($grantType instanceof GrantType\GrantTypeInterface)) {
+                    throw new LogicException(
+                        'The GrantTypeCollection accept only GrantTypeInterface instance.'
+                    );
+                }
+
+                $collection->addGrantType($grantType);
+            }
+
+            return $collection;
         };
 
         // OAuth2 Authentication Provider

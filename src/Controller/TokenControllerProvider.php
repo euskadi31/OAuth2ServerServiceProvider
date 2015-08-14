@@ -52,14 +52,10 @@ class TokenControllerProvider implements ControllerProviderInterface
                 throw new OAuthInvalidClientException('Unknown client');
             }
 
-            switch ($grantType) {
-                case 'password':
-                    return $app['oauth2.password.grant']->apply($request);
-                    break;
+            $grantType = $app['oauth2.grant_types']->get($grantType);
 
-                default:
-                    throw new OAuthUnsupportedGrantTypeException();
-            }
+
+
         });
 
         return $controllers;
