@@ -37,6 +37,7 @@ class PasswordGrantType implements GrantTypeInterface
         $this->authenticationManager    = $authenticationManager;
         $this->providerKey              = $providerKey;
         $this->accessTokenProvider      = $accessTokenProvider;
+        var_dump($providerKey);
     }
 
     /**
