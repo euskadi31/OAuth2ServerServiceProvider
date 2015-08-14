@@ -12,11 +12,12 @@ namespace Euskadi31\Component\Security\GrantType;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Euskadi31\Component\Security\Core\Exception\OAuthInvalidRequestException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Euskadi31\Component\Security\Storage\AccessTokenProviderInterface;
 use Euskadi31\Component\Security\Storage\ClientInterface;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 /**
  * PasswordGrantType
@@ -26,17 +27,20 @@ use Euskadi31\Component\Security\Storage\ClientInterface;
  */
 class PasswordGrantType implements GrantTypeInterface
 {
-    protected $authenticationManager;
+    protected $userProvider;
 
     protected $providerKey;
 
     protected $accessTokenProvider;
 
-    public function __construct(AuthenticationManagerInterface $authenticationManager, $providerKey, AccessTokenProviderInterface $accessTokenProvider)
+    protected $encoderFactory;
+
+    public function __construct(UserProviderInterface $userProvider, $providerKey, AccessTokenProviderInterface $accessTokenProvider, EncoderFactoryInterface $encoderFactory)
     {
-        $this->authenticationManager    = $authenticationManager;
-        $this->providerKey              = $providerKey;
-        $this->accessTokenProvider      = $accessTokenProvider;
+        $this->userProvider         = $userProvider;
+        $this->providerKey          = $providerKey;
+        $this->accessTokenProvider  = $accessTokenProvider;
+        $this->encoderFactory       = $encoderFactory;
     }
 
     /**
@@ -64,13 +68,12 @@ class PasswordGrantType implements GrantTypeInterface
             throw new OAuthInvalidRequestException('Missing password parameter.');
         }
 
-        try {
-            $token = $this->authenticationManager->authenticate(
-                new UsernamePasswordToken($username, $password, $this->providerKey)
-            );
-        } catch (Exception $e) {
-            //@TODO change for conform error
-            throw new OAuthInvalidRequestException($e->getMessage());
+        $user = $this->userProvider->loadUserByUsername($username);
+
+        $token = new UsernamePasswordToken($username, $password, $this->providerKey);
+
+        if (!$this->encoderFactory->getEncoder($user)->isPasswordValid($user->getPassword(), $token->getCredentials(), $user->getSalt())) {
+            throw new OAuthInvalidRequestException('Bad credentials.');
         }
 
         $accessToken = $this->accessTokenProvider->create($user, $client, $scope);
