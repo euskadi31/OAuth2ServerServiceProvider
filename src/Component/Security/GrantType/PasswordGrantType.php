@@ -78,6 +78,8 @@ class PasswordGrantType implements GrantTypeInterface
 
         $accessToken = $this->accessTokenProvider->create($user, $client, $scope);
 
+        var_dump($accessToken);
+
         $data = [
             'access_token'  => $accessToken->getId(),
             'token_type'    => 'bearer',
