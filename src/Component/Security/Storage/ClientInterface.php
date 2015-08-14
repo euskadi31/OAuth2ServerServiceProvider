@@ -58,4 +58,11 @@ interface ClientInterface
      * @return boolean
      */
     public function isLocked();
+
+    /**
+     * Get grant type allowd for client
+     *
+     * @return array
+     */
+    public function getGrantTypes();
 }
