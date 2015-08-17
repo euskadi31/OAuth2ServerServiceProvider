@@ -16,6 +16,7 @@ namespace Euskadi31\Component\Security\Http\Firewall;
 use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken;
 use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
