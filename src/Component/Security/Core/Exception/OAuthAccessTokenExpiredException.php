@@ -32,6 +32,10 @@ class OAuthAccessTokenExpiredException extends CredentialsExpiredException imple
      */
     public function __construct($message = '', $code = 401, Exception $previous = null, $realmName = 'API')
     {
+        if (empty($message)) {
+            $message = $this->getMessageKey();
+        }
+
         parent::__construct($message, $code, $previous);
 
         $this->statusCode   = $code;

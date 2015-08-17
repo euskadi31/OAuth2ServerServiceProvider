@@ -30,11 +30,9 @@ class TokenControllerProvider implements ControllerProviderInterface
      */
     public function connect(Application $app)
     {
-        $self = $this;
-
         $controllers = $app['controllers_factory'];
 
-        $controllers->post('/oauth/token', function(Request $request) use ($app, $self) {
+        $controllers->post('/oauth/token', function(Request $request) use ($app) {
             $clientId = $request->request->get('client_id');
             $grantType = $request->request->get('grant_type');
 

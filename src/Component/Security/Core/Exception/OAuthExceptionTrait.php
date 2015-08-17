@@ -108,4 +108,14 @@ trait OAuthExceptionTrait
     {
         return $this->errorCode;
     }
+
+    /**
+     * Get RealmName
+     *
+     * @return string
+     */
+    public function getRealmName()
+    {
+        return $this->realmName;
+    }
 }

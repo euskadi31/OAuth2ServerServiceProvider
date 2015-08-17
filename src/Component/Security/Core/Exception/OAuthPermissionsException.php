@@ -28,11 +28,15 @@ class OAuthPermissionsException extends InsufficientAuthenticationException impl
      * @param string         $message
      * @param integer        $code
      * @param Exception|null $previous
-     * @param array          $scope
+     * @param array          $scopes
      * @param string         $realmName
      */
-    public function __construct($message = '', $code = 403, Exception $previous = null, $scope = [], $realmName = 'API')
+    public function __construct($message = '', $code = 403, Exception $previous = null, $scopes = [], $realmName = 'API')
     {
+        if (empty($message)) {
+            $message = $this->getMessageKey();
+        }
+
         parent::__construct($message, $code, $previous);
 
         $this->scopes       = $scopes;

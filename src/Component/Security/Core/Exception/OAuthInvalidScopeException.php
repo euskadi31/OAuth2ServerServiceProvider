@@ -32,6 +32,10 @@ class OAuthInvalidScopeException extends InvalidArgumentException implements OAu
      */
     public function __construct($message = '', $code = 400, Exception $previous = null, $realmName = 'API')
     {
+        if (empty($message)) {
+            $message = 'The requested scope is invalid, unknown, or malformed.';
+        }
+
         parent::__construct($message, $code, $previous);
 
         $this->statusCode   = $code;

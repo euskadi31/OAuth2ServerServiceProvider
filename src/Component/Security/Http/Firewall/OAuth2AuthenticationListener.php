@@ -15,7 +15,6 @@ namespace Euskadi31\Component\Security\Http\Firewall;
 
 use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken;
 use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
@@ -84,6 +83,7 @@ class OAuth2AuthenticationListener implements ListenerInterface
         $header = null;
 
         if (!$request->headers->has('authorization')) {
+            // @codeCoverageIgnoreStart
             // The Authorization header may not be passed to PHP by Apache;
             // Trying to obtain it through apache_request_headers()
             if (function_exists('apache_request_headers')) {
@@ -103,6 +103,7 @@ class OAuth2AuthenticationListener implements ListenerInterface
                     $header = $headers['Authorization'];
                 }
             }
+            // @codeCoverageIgnoreEnd
         } else {
             $header = $request->headers->get('authorization');
         }
@@ -110,7 +111,7 @@ class OAuth2AuthenticationListener implements ListenerInterface
         if (!empty($header)) {
             $pos = strpos($header, 'Bearer');
 
-            if ($pos > 0) {
+            if ($pos >= 0) {
                 $accessToken = substr($header, $pos + 7);
             }
         }
@@ -153,6 +154,10 @@ class OAuth2AuthenticationListener implements ListenerInterface
 
         if (empty($clientId)) {
             return null;
+        }
+
+        if (null !== $this->logger) {
+            $this->logger->info('OAuth2 authentication parameter found for client.');
         }
 
         $token = new OAuth2ClientToken();

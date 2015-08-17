@@ -10,4 +10,7 @@ test: vendor
 check: vendor
 	@./vendor/bin/phpcs --standard=./vendor/leaphub/phpcs-symfony2-standard/leaphub/phpcs/Symfony2/ ./src
 
+phpmd: vendor
+	@./vendor/bin/phpmd ./src/ text unusedcode
+
 travis: test check
