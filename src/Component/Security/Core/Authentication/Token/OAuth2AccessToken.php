@@ -10,25 +10,17 @@
 
 namespace Euskadi31\Component\Security\Core\Authentication\Token;
 
-use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
-use Euskadi31\Component\Security\Storage\ClientInterface;
-
 /**
- * OAuth2 token
+ * OAuth2 access token
  *
  * @author Axel Etcheverry <axel@etcheverry.biz>
  */
-class OAuth2Token extends AbstractToken
+class OAuth2AccessToken extends AbstractToken
 {
     /**
      * @var string
      */
     protected $accessToken;
-
-    /**
-     * @var ClientInterface
-     */
-    protected $client;
 
     /**
      * Set access token
@@ -48,26 +40,6 @@ class OAuth2Token extends AbstractToken
     public function getAccessToken()
     {
         return $this->accessToken;
-    }
-
-    /**
-     * Set client
-     *
-     * @param ClientInterface $client
-     */
-    public function setClient(ClientInterface $client)
-    {
-        $this->client = $client;
-    }
-
-    /**
-     * Get client
-     *
-     * @return ClientInterface
-     */
-    public function getClient()
-    {
-        return $this->client;
     }
 
     /**

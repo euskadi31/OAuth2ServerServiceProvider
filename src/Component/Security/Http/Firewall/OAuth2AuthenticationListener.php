@@ -13,7 +13,8 @@
  */
 namespace Euskadi31\Component\Security\Http\Firewall;
 
-use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2Token;
+use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken;
+use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
@@ -21,7 +22,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Psr\Log\LoggerInterface;
-use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenNotFoundException;
+use Euskadi31\Component\Security\Core\Exception\OAuthInvalidRequestException;
 
 /**
  * OAuth2 Authentication Listener
@@ -70,21 +71,18 @@ class OAuth2AuthenticationListener implements ListenerInterface
     }
 
     /**
-     * Handles OAuth2 authentication.
+     * Handle Access Token
      *
-     * @param GetResponseEvent $event A GetResponseEvent instance
-     * @throws OAuthExceptionInterface
-     * @return void
+     * @param  Request $request
+     * @return OAuth2AccessToken
      */
-    final public function handle(GetResponseEvent $event)
+    protected function handleAccessToken(Request $request)
     {
-        $request = $event->getRequest();
-
         $accessToken = null;
 
         $header = null;
 
-        if (!$request->headers->has('Authorization')) {
+        if (!$request->headers->has('authorization')) {
             // The Authorization header may not be passed to PHP by Apache;
             // Trying to obtain it through apache_request_headers()
             if (function_exists('apache_request_headers')) {
@@ -130,20 +128,64 @@ class OAuth2AuthenticationListener implements ListenerInterface
 
         if (empty($accessToken)) {
             return null;
-            /*throw new OAuthAccessTokenNotFoundException(
-                'An access token is required to request this resource.',
-                400,
-                null,
-                $this->realmName
-            );*/
         }
 
         if (null !== $this->logger) {
             $this->logger->info('OAuth2 authentication Authorization header found for user.');
         }
 
-        $token = new OAuth2Token();
+        $token = new OAuth2AccessToken();
         $token->setAccessToken($accessToken);
+
+        return $token;
+    }
+
+    /**
+     * Handle Client Id
+     *
+     * @param  Request $request
+     * @return OAuth2ClientToken
+     */
+    protected function handleClientId(Request $request)
+    {
+        $clientId = $request->query->get('client_id');
+
+        if (empty($clientId)) {
+            return null;
+        }
+
+        $token = new OAuth2ClientToken();
+        $token->setClientId($clientId);
+
+        return $token;
+    }
+
+    /**
+     * Handles OAuth2 authentication.
+     *
+     * @param GetResponseEvent $event A GetResponseEvent instance
+     * @throws OAuthExceptionInterface
+     * @return void
+     */
+    final public function handle(GetResponseEvent $event)
+    {
+        $request = $event->getRequest();
+
+        $token = $this->handleAccessToken($request);
+
+        if (empty($token)) {
+            $token = $this->handleClientId($request);
+        }
+
+        if (empty($token)) {
+            //return null;
+            throw new OAuthInvalidRequestException(
+                'Missing client_id or access_token URL parameter.',
+                400,
+                null,
+                $this->realmName
+            );
+        }
 
         $token = $this->authenticationManager->authenticate($token);
 

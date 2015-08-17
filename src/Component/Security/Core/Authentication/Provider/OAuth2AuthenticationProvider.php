@@ -20,7 +20,9 @@ use Euskadi31\Component\Security\Storage\ClientProviderInterface;
 use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenExpiredException;
 use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenNotFoundException;
 //use Euskadi31\Component\Security\Core\Exception\OAuthPermissionsException;
-use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2Token;
+use Euskadi31\Component\Security\Core\Authentication\Token\AbstractToken;
+use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken;
+use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 
 /**
@@ -135,14 +137,13 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Authenticate with access token
+     *
+     * @param  TokenInterface $token
+     * @return OAuth2AccessToken
      */
-    public function authenticate(TokenInterface $token)
+    protected function authenticateAccessToken(TokenInterface $token)
     {
-        if (!$this->supports($token)) {
-            return null;
-        }
-
         $accessToken = $this->accessTokenProvider->get($token->getAccessToken());
 
         $this->checkAccessToken($accessToken);
@@ -166,7 +167,7 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
             );
         }
 
-        $token = new OAuth2Token($user->getRoles());
+        $token = new OAuth2AccessToken($user->getRoles());
         $token->setAuthenticated(true);
         $token->setAccessToken($accessToken->getId());
         $token->setUser($user);
@@ -176,10 +177,46 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
     }
 
     /**
+     * Authenticate with client id
+     *
+     * @param  TokenInterface $token
+     * @return OAuth2ClientToken
+     */
+    protected function authenticateClientId(TokenInterface $token)
+    {
+        $client = $this->clientProvider->get($token->getClientId());
+
+        $this->checkClient($client);
+
+        $token = new OAuth2ClientToken([]);
+        $token->setAuthenticated(true);
+        $token->setClientId($token->getClientId());
+        $token->setClient($client);
+
+        return $token;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function authenticate(TokenInterface $token)
+    {
+        if (!$this->supports($token)) {
+            return null;
+        }
+
+        if ($token instanceof OAuth2AccessToken) {
+            return $this->authenticateAccessToken($token);
+        } else if ($token instanceof OAuth2ClientToken) {
+            return $this->authenticateClientId($token);
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function supports(TokenInterface $token)
     {
-        return $token instanceof OAuth2Token;
+        return $token instanceof AbstractToken;
     }
 }
