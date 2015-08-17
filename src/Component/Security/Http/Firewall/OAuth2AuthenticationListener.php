@@ -179,7 +179,6 @@ class OAuth2AuthenticationListener implements ListenerInterface
         }
 
         if (empty($token)) {
-            //return null;
             throw new OAuthInvalidRequestException(
                 'Missing client_id or access_token URL parameter.',
                 400,

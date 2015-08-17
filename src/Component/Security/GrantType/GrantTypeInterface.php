@@ -30,7 +30,8 @@ interface GrantTypeInterface
     /**
      * Handle request
      *
-     * @param  Request $request
+     * @param  Request         $request
+     * @param  ClientInterface $client
      * @return Response
      */
     public function handle(Request $request, ClientInterface $client);

@@ -35,6 +35,13 @@ class PasswordGrantType implements GrantTypeInterface
 
     protected $encoderFactory;
 
+    /**
+     *
+     * @param UserProviderInterface        $userProvider
+     * @param string                       $providerKey
+     * @param AccessTokenProviderInterface $accessTokenProvider
+     * @param EncoderFactoryInterface      $encoderFactory
+     */
     public function __construct(UserProviderInterface $userProvider, $providerKey, AccessTokenProviderInterface $accessTokenProvider, EncoderFactoryInterface $encoderFactory)
     {
         $this->userProvider         = $userProvider;
