@@ -188,12 +188,12 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
 
         $this->checkClient($client);
 
-        $token = new OAuth2ClientToken([]);
-        $token->setAuthenticated(true);
-        $token->setClientId($token->getClientId());
-        $token->setClient($client);
+        $retval = new OAuth2ClientToken([]);
+        $retval->setAuthenticated(true);
+        $retval->setClientId($token->getClientId());
+        $retval->setClient($client);
 
-        return $token;
+        return $retval;
     }
 
     /**
@@ -206,10 +206,12 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
         }
 
         if ($token instanceof OAuth2AccessToken) {
-            return $this->authenticateAccessToken($token);
+            $token = $this->authenticateAccessToken($token);
         } else if ($token instanceof OAuth2ClientToken) {
-            return $this->authenticateClientId($token);
+            $token = $this->authenticateClientId($token);
         }
+
+        return $token;
     }
 
     /**

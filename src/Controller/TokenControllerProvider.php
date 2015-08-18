@@ -33,8 +33,10 @@ class TokenControllerProvider implements ControllerProviderInterface
         $controllers = $app['controllers_factory'];
 
         $controllers->post('/oauth/token', function(Request $request) use ($app) {
-            $clientId = $request->request->get('client_id');
-            $grantType = $request->request->get('grant_type');
+
+            $grantType  = $request->request->get('grant_type');
+            $clientId   = $request->server->get('PHP_AUTH_USER', $request->request->get('client_id'));
+            $secret     = $request->server->get('PHP_AUTH_PW', $request->request->get('client_secret'));
 
             if (empty($clientId)) {
                 throw new OAuthInvalidRequestException('Missing client_id parameter.');
@@ -48,6 +50,10 @@ class TokenControllerProvider implements ControllerProviderInterface
 
             if (empty($client)) {
                 throw new OAuthInvalidClientException('Unknown client');
+            }
+
+            if (!empty($secret) && !hash_equals($client->getSecret(), $secret)) {
+                throw new OAuthUnauthorizedClientException();
             }
 
             $grantType = $app['oauth2.grant_types']->get($grantType);
