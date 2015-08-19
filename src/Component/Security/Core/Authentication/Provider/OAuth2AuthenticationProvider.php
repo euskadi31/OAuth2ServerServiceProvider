@@ -19,7 +19,6 @@ use Euskadi31\Component\Security\Storage\AccessTokenProviderInterface;
 use Euskadi31\Component\Security\Storage\ClientProviderInterface;
 use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenExpiredException;
 use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenNotFoundException;
-//use Euskadi31\Component\Security\Core\Exception\OAuthPermissionsException;
 use Euskadi31\Component\Security\Core\Authentication\Token\AbstractToken;
 use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken;
 use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken;

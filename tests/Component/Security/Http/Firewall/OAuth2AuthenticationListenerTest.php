@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Euskadi31\Component\Security\Core\Authentication\Token;
+namespace Euskadi31\Component\Security\Http\Firewall;
 
 use Euskadi31\Component\Security\Http\Firewall\OAuth2AuthenticationListener;
 use Symfony\Component\HttpFoundation\HeaderBag;

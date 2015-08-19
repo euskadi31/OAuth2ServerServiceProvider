@@ -14,9 +14,9 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use LogicException;
 use Euskadi31\Component\Security\Core\Authentication\Provider\OAuth2AuthenticationProvider;
-use Euskadi31\Component\Security\Http\EntryPoint\OAuth2AuthenticationEntryPoint;
 use Euskadi31\Component\Security\Http\Firewall\OAuth2AuthenticationListener;
 use Euskadi31\Component\Security\GrantType;
+use Euskadi31\Component\Security\Http\Signature\DefaultSignature;
 
 /**
  * OAuth2 server integration for Silex.
@@ -54,6 +54,10 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
 
         $app['oauth2.auth_code.provider'] = function($app) {
             throw new LogicException('The "auth_code" provider entry is not registered.');
+        };
+
+        $app['oauth2.signature'] = function($app) {
+            return new DefaultSignature();
         };
 
         $app['oauth2.grant_types'] = function($app) {

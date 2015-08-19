@@ -26,8 +26,7 @@ use Symfony\Component\Security\Core\Util\StringUtils;
 class TokenControllerProvider implements ControllerProviderInterface
 {
     /**
-     * @param  Silex\Application $app
-     * @return Silex\ControllerCollection
+     * {@inheritdoc}
      */
     public function connect(Application $app)
     {

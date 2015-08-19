@@ -22,8 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 class AuthorizeControllerProvider implements ControllerProviderInterface
 {
     /**
-     * @param  Silex\Application $app
-     * @return Silex\ControllerCollection
+     * {@inheritdoc}
      */
     public function connect(Application $app)
     {

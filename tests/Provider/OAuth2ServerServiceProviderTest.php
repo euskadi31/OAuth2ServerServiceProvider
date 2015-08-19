@@ -215,6 +215,10 @@ class OAuth2ServerProviderTest extends \PHPUnit_Framework_TestCase
             'pre_auth'
         ], $factory);
 
+        $signature = $app['oauth2.signature'];
+
+        $this->assertInstanceOf('Euskadi31\Component\Security\Http\Signature\SignatureInterface', $signature);
+
         $passwordGrantType = $app['oauth2.grant_type.password'];
 
         $this->assertInstanceOf('Euskadi31\Component\Security\GrantType\PasswordGrantType', $passwordGrantType);
@@ -231,5 +235,4 @@ class OAuth2ServerProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Euskadi31\Component\Security\Http\Firewall\OAuth2AuthenticationListener', $listener);
     }
-
 }
