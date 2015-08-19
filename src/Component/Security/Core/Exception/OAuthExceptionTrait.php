@@ -10,8 +10,6 @@
 
 namespace Euskadi31\Component\Security\Core\Exception;
 
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-
 /**
  * OAuthException
  *
