@@ -22,7 +22,10 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $tokenStorageMock   = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
         $authManagerMock    = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
         $authManagerMock->expects($this->once())
-            ->method('authenticate');
+            ->method('authenticate')
+            ->with($this->callback(function($arg) {
+                return $arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken;
+            }));
         $loggerMock         = $this->getMock('Psr\Log\LoggerInterface');
 
         $listener = new OAuth2AuthenticationListener($tokenStorageMock, $authManagerMock, 'Foo', $loggerMock);
@@ -45,7 +48,10 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $tokenStorageMock   = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
         $authManagerMock    = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
         $authManagerMock->expects($this->once())
-            ->method('authenticate');
+            ->method('authenticate')
+            ->with($this->callback(function($arg) {
+                return $arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken;
+            }));
         $loggerMock         = $this->getMock('Psr\Log\LoggerInterface');
 
         $listener = new OAuth2AuthenticationListener($tokenStorageMock, $authManagerMock, 'Foo', $loggerMock);
@@ -69,7 +75,10 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $tokenStorageMock   = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
         $authManagerMock    = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
         $authManagerMock->expects($this->once())
-            ->method('authenticate');
+            ->method('authenticate')
+            ->with($this->callback(function($arg) {
+                return $arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken;
+            }));
         $loggerMock         = $this->getMock('Psr\Log\LoggerInterface');
 
         $listener = new OAuth2AuthenticationListener($tokenStorageMock, $authManagerMock, 'Foo', $loggerMock);
@@ -94,12 +103,48 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $listener->handle($getResponseEventMock);
     }
 
+    public function testAuthenticationByClientIdInHeader()
+    {
+        $tokenStorageMock   = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
+        $authManagerMock    = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
+        $authManagerMock->expects($this->once())
+            ->method('authenticate')
+            ->with($this->callback(function($arg) {
+                return $arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken;
+            }));
+        $loggerMock         = $this->getMock('Psr\Log\LoggerInterface');
+
+        $listener = new OAuth2AuthenticationListener($tokenStorageMock, $authManagerMock, 'Foo', $loggerMock);
+
+        $requestMock = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $requestMock->headers = new HeaderBag;
+        $requestMock->headers->set('Authorization', sprintf('Basic %s', base64_encode('foo')));
+        $requestMock->query = new ParameterBag;
+        $requestMock->server = new ServerBag;
+        $requestMock->server->set('content_type', 'application/x-www-form-urlencoded');
+        $requestMock->request = new ParameterBag;
+        $requestMock->expects($this->once())
+            ->method('getMethod')
+            ->will($this->returnValue('POST'));
+
+        $getResponseEventMock = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $getResponseEventMock->method('getRequest')
+            ->will($this->returnValue($requestMock));
+
+        $listener->handle($getResponseEventMock);
+    }
+
     public function testAuthenticationByClientId()
     {
         $tokenStorageMock   = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
         $authManagerMock    = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
         $authManagerMock->expects($this->once())
-            ->method('authenticate');
+            ->method('authenticate')
+            ->with($this->callback(function($arg) {
+                return $arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken;
+            }));
         $loggerMock         = $this->getMock('Psr\Log\LoggerInterface');
 
         $listener = new OAuth2AuthenticationListener($tokenStorageMock, $authManagerMock, 'Foo', $loggerMock);

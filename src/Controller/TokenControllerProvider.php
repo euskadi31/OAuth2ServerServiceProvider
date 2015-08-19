@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Euskadi31\Component\Security\Core\Exception\OAuthInvalidRequestException;
 use Euskadi31\Component\Security\Core\Exception\OAuthInvalidClientException;
 use Euskadi31\Component\Security\Core\Exception\OAuthUnauthorizedClientException;
+use Symfony\Component\Security\Core\Util\StringUtils;
 
 /**
  * TokenControllerProvider
@@ -52,7 +53,7 @@ class TokenControllerProvider implements ControllerProviderInterface
                 throw new OAuthInvalidClientException('Unknown client');
             }
 
-            if (!empty($secret) && !hash_equals($client->getSecret(), $secret)) {
+            if (!empty($secret) && !StringUtils::equals($client->getSecret(), $secret)) {
                 throw new OAuthUnauthorizedClientException();
             }
 

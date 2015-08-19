@@ -80,38 +80,12 @@ class OAuth2AuthenticationListener implements ListenerInterface
     {
         $accessToken = null;
 
-        $header = null;
-
-        if (!$request->headers->has('authorization')) {
-            // @codeCoverageIgnoreStart
-            // The Authorization header may not be passed to PHP by Apache;
-            // Trying to obtain it through apache_request_headers()
-            if (function_exists('apache_request_headers')) {
-                $headers = apache_request_headers();
-
-                // Server-side fix for bug in old shitty Android versions (a nice side-effect of
-                // this fix means we don't care about capitalization for Authorization)
-                $headers = array_combine(
-                    array_map(
-                        'ucwords',
-                        array_keys($headers)
-                    ),
-                    array_values($headers)
-                );
-
-                if (isset($headers['Authorization'])) {
-                    $header = $headers['Authorization'];
-                }
-            }
-            // @codeCoverageIgnoreEnd
-        } else {
-            $header = $request->headers->get('authorization');
-        }
+        $header = $request->headers->get('authorization');
 
         if (!empty($header)) {
             $pos = strpos($header, 'Bearer');
 
-            if ($pos >= 0) {
+            if ($pos !== false) {
                 $accessToken = substr($header, $pos + 7);
             }
         }
@@ -150,7 +124,26 @@ class OAuth2AuthenticationListener implements ListenerInterface
      */
     protected function handleClientId(Request $request)
     {
-        $clientId = $request->query->get('client_id');
+        $header = $request->headers->get('authorization');
+        $clientId = null;
+
+        if (!empty($header)) {
+            $pos = strpos($header, 'Basic');
+
+            if ($pos >= 0) {
+                $clientId = explode(':', base64_decode(substr($header, $pos + 6)))[0];
+            }
+        }
+
+        if (empty($clientId)) {
+            $clientId = $request->server->get(
+                'PHP_AUTH_USER',
+                $request->request->get(
+                    'client_id',
+                    $request->query->get('client_id')
+                )
+            );
+        }
 
         if (empty($clientId)) {
             return null;
