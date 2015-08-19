@@ -1,7 +1,7 @@
 # Silex OAuth2 Server Service Provider
 
 [![Build Status](https://travis-ci.org/euskadi31/OAuth2ServerServiceProvider.svg?branch=master)](https://travis-ci.org/euskadi31/OAuth2ServerServiceProvider)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/2c558cf6-6607-4eba-a1c1-08f60e1d14ae/mini.png)](https://insight.sensiolabs.com/projects/2c558cf6-6607-4eba-a1c1-08f60e1d14ae)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/060794b2-c8f1-4713-81fa-4aa29494e111/mini.png)](https://insight.sensiolabs.com/projects/060794b2-c8f1-4713-81fa-4aa29494e111)
 
 
 ## Install
