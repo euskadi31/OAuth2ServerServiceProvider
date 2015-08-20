@@ -13,6 +13,7 @@ namespace Euskadi31\Silex\Controller;
 use Silex\Application;
 use Silex\Api\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * AuthorizeControllerProvider
@@ -29,8 +30,9 @@ class AuthorizeControllerProvider implements ControllerProviderInterface
         $controllers = $app['controllers_factory'];
 
         $controllers->get('/oauth/authorize', function(Request $request) use ($app) {
-
-            return '';
+            // @codeCoverageIgnoreStart
+            return new Response('');
+            // @codeCoverageIgnoreEnd
         })->secure('IS_AUTHENTICATED_FULLY');
 
         return $controllers;
