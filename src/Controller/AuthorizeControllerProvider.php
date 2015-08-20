@@ -29,7 +29,7 @@ class AuthorizeControllerProvider implements ControllerProviderInterface
     {
         $controllers = $app['controllers_factory'];
 
-        $controllers->get('/oauth/authorize', function(Request $request) use ($app) {
+        $controllers->get('/oauth/authorize', function(Request $request) {
             // @codeCoverageIgnoreStart
             return new Response('');
             // @codeCoverageIgnoreEnd
