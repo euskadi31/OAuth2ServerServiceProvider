@@ -21,12 +21,14 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $userCheckerMock            = $this->getMock('Symfony\Component\Security\Core\User\UserCheckerInterface');
         $accessTokenProviderMock    = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenProviderInterface');
         $clientProviderMock         = $this->getMock('Euskadi31\Component\Security\Storage\ClientProviderInterface');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $provider = new OAuth2AuthenticationProvider(
             $userProviderMock,
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
             'API'
         );
 
@@ -40,12 +42,14 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $accessTokenProviderMock    = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenProviderInterface');
         $clientProviderMock         = $this->getMock('Euskadi31\Component\Security\Storage\ClientProviderInterface');
         $tokenMock                  = $this->getMock('Euskadi31\Component\Security\Core\Authentication\Token\AbstractToken');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $provider = new OAuth2AuthenticationProvider(
             $userProviderMock,
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
             'API'
         );
 
@@ -59,12 +63,14 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $accessTokenProviderMock    = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenProviderInterface');
         $clientProviderMock         = $this->getMock('Euskadi31\Component\Security\Storage\ClientProviderInterface');
         $tokenMock                  = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\AbstractToken');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $provider = new OAuth2AuthenticationProvider(
             $userProviderMock,
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
             'API'
         );
 
@@ -82,6 +88,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $accessTokenProviderMock    = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenProviderInterface');
         $clientProviderMock         = $this->getMock('Euskadi31\Component\Security\Storage\ClientProviderInterface');
         $tokenMock                  = $this->getMock('Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $accessTokenProviderMock->expects($this->once())
             ->method('get')
@@ -97,6 +104,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
             'API'
         );
 
@@ -115,6 +123,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $clientProviderMock         = $this->getMock('Euskadi31\Component\Security\Storage\ClientProviderInterface');
         $tokenMock                  = $this->getMock('Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken');
         $accessTokenMock            = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenInterface');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $tokenMock->expects($this->once())
             ->method('getAccessToken')
@@ -134,6 +143,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
             'API'
         );
 
@@ -152,6 +162,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $clientProviderMock         = $this->getMock('Euskadi31\Component\Security\Storage\ClientProviderInterface');
         $tokenMock                  = $this->getMock('Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken');
         $accessTokenMock            = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenInterface');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $tokenMock->expects($this->once())
             ->method('getAccessToken')
@@ -175,6 +186,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
             'API'
         );
 
@@ -193,6 +205,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $clientProviderMock         = $this->getMock('Euskadi31\Component\Security\Storage\ClientProviderInterface');
         $tokenMock                  = $this->getMock('Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken');
         $accessTokenMock            = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenInterface');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $tokenMock->expects($this->once())
             ->method('getAccessToken')
@@ -225,6 +238,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
             'API'
         );
 
@@ -244,6 +258,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $tokenMock                  = $this->getMock('Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken');
         $accessTokenMock            = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenInterface');
         $clientMock                 = $this->getMock('Euskadi31\Component\Security\Storage\ClientInterface');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $tokenMock->expects($this->once())
             ->method('getAccessToken')
@@ -280,6 +295,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
             'API'
         );
 
@@ -299,6 +315,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $tokenMock                  = $this->getMock('Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken');
         $accessTokenMock            = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenInterface');
         $clientMock                 = $this->getMock('Euskadi31\Component\Security\Storage\ClientInterface');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $tokenMock->expects($this->once())
             ->method('getAccessToken')
@@ -339,6 +356,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
             'API'
         );
 
@@ -359,6 +377,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $accessTokenMock            = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenInterface');
         $clientMock                 = $this->getMock('Euskadi31\Component\Security\Storage\ClientInterface');
         $userMock                   = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $tokenMock->expects($this->once())
             ->method('getAccessToken')
@@ -413,6 +432,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
             'API'
         );
 
@@ -429,6 +449,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $accessTokenMock            = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenInterface');
         $clientMock                 = $this->getMock('Euskadi31\Component\Security\Storage\ClientInterface');
         $userMock                   = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $userMock->expects($this->once())
             ->method('getRoles')
@@ -490,6 +511,267 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
+            'API'
+        );
+
+        $token = $provider->authenticate($tokenMock);
+
+        $this->assertInstanceOf('Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken', $token);
+
+        $this->assertEquals('foo', $token->getAccessToken());
+        $this->assertEquals($clientMock, $token->getClient());
+        $this->assertEquals($userMock, $token->getUser());
+    }
+
+    /**
+     * @expectedException \Euskadi31\Component\Security\Core\Exception\OAuthInvalidRequestException
+     * @expectedExceptionMessage The request is not signed.
+     */
+    public function testAuthenticateWithoutSignature()
+    {
+        $userProviderMock           = $this->getMock('Symfony\Component\Security\Core\User\UserProviderInterface');
+        $userCheckerMock            = $this->getMock('Symfony\Component\Security\Core\User\UserCheckerInterface');
+        $accessTokenProviderMock    = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenProviderInterface');
+        $clientProviderMock         = $this->getMock('Euskadi31\Component\Security\Storage\ClientProviderInterface');
+        $tokenMock                  = $this->getMock('Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken');
+        $accessTokenMock            = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenInterface');
+        $clientMock                 = $this->getMock('Euskadi31\Component\Security\Storage\ClientInterface');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
+
+        $tokenMock->expects($this->once())
+            ->method('getAccessToken')
+            ->will($this->returnValue('foo'));
+
+        $accessTokenMock->expects($this->once())
+            ->method('isExpired')
+            ->will($this->returnValue(false));
+
+        $accessTokenMock->expects($this->once())
+            ->method('isRevoked')
+            ->will($this->returnValue(false));
+
+        $accessTokenMock->expects($this->once())
+            ->method('getClient')
+            ->will($this->returnValue('bar'));
+
+        $accessTokenProviderMock->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('foo'))
+            ->will($this->returnValue($accessTokenMock));
+
+        $clientMock->expects($this->once())
+            ->method('isEnabled')
+            ->will($this->returnValue(true));
+
+        $clientMock->expects($this->once())
+            ->method('isLocked')
+            ->will($this->returnValue(false));
+
+        $clientMock->expects($this->once())
+            ->method('isSignatureRequired')
+            ->will($this->returnValue(true));
+
+        $clientProviderMock->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('bar'))
+            ->will($this->returnValue($clientMock));
+
+        $provider = new OAuth2AuthenticationProvider(
+            $userProviderMock,
+            $userCheckerMock,
+            $accessTokenProviderMock,
+            $clientProviderMock,
+            $signatureMock,
+            'API'
+        );
+
+        $provider->authenticate($tokenMock);
+    }
+
+    /**
+     * @expectedException \Euskadi31\Component\Security\Core\Exception\OAuthInvalidRequestException
+     * @expectedExceptionMessage The request signature we calculated does not match the signature you provided.
+     */
+    public function testAuthenticateWithBadSignature()
+    {
+        $userProviderMock           = $this->getMock('Symfony\Component\Security\Core\User\UserProviderInterface');
+        $userCheckerMock            = $this->getMock('Symfony\Component\Security\Core\User\UserCheckerInterface');
+        $accessTokenProviderMock    = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenProviderInterface');
+        $clientProviderMock         = $this->getMock('Euskadi31\Component\Security\Storage\ClientProviderInterface');
+        $tokenMock                  = $this->getMock('Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken');
+        $accessTokenMock            = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenInterface');
+        $clientMock                 = $this->getMock('Euskadi31\Component\Security\Storage\ClientInterface');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
+
+        $signatureMock->expects($this->once())
+            ->method('verify')
+            ->will($this->returnValue(false));
+
+        $tokenMock->expects($this->once())
+            ->method('getAccessToken')
+            ->will($this->returnValue('foo'));
+
+        $tokenMock->expects($this->once())
+            ->method('getSignature')
+            ->will($this->returnValue('fooo'));
+
+        $tokenMock->expects($this->exactly(2))
+            ->method('isSigned')
+            ->will($this->returnValue(true));
+
+        $tokenMock->expects($this->once())
+            ->method('getSignedUrl')
+            ->will($this->returnValue('https://api.domain.com/v1/me'));
+
+        $accessTokenMock->expects($this->once())
+            ->method('isExpired')
+            ->will($this->returnValue(false));
+
+        $accessTokenMock->expects($this->once())
+            ->method('isRevoked')
+            ->will($this->returnValue(false));
+
+        $accessTokenMock->expects($this->once())
+            ->method('getClient')
+            ->will($this->returnValue('bar'));
+
+        $accessTokenProviderMock->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('foo'))
+            ->will($this->returnValue($accessTokenMock));
+
+        $clientMock->expects($this->once())
+            ->method('isEnabled')
+            ->will($this->returnValue(true));
+
+        $clientMock->expects($this->once())
+            ->method('isLocked')
+            ->will($this->returnValue(false));
+
+        $clientMock->expects($this->exactly(2))
+            ->method('isSignatureRequired')
+            ->will($this->returnValue(true));
+
+        $clientMock->expects($this->once())
+            ->method('getSecret')
+            ->will($this->returnValue('test'));
+
+        $clientProviderMock->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('bar'))
+            ->will($this->returnValue($clientMock));
+
+        $provider = new OAuth2AuthenticationProvider(
+            $userProviderMock,
+            $userCheckerMock,
+            $accessTokenProviderMock,
+            $clientProviderMock,
+            $signatureMock,
+            'API'
+        );
+
+        $provider->authenticate($tokenMock);
+    }
+
+
+    public function testAuthenticateWithSignature()
+    {
+        $userProviderMock           = $this->getMock('Symfony\Component\Security\Core\User\UserProviderInterface');
+        $userCheckerMock            = $this->getMock('Symfony\Component\Security\Core\User\UserCheckerInterface');
+        $accessTokenProviderMock    = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenProviderInterface');
+        $clientProviderMock         = $this->getMock('Euskadi31\Component\Security\Storage\ClientProviderInterface');
+        $tokenMock                  = $this->getMock('Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken');
+        $accessTokenMock            = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenInterface');
+        $clientMock                 = $this->getMock('Euskadi31\Component\Security\Storage\ClientInterface');
+        $userMock                   = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
+
+        $signatureMock->expects($this->once())
+            ->method('verify')
+            ->will($this->returnValue(true));
+
+        $userMock->expects($this->once())
+            ->method('getRoles')
+            ->will($this->returnValue(['ROLE_USER']));
+
+        $tokenMock->expects($this->once())
+            ->method('getAccessToken')
+            ->will($this->returnValue('foo'));
+
+        $tokenMock->expects($this->exactly(2))
+            ->method('getSignature')
+            ->will($this->returnValue('d12f9a9cf82fef1436caf54d5e7f8ab6796bdd10b32f80e77873ac535676ce0c'));
+
+        $tokenMock->expects($this->exactly(2))
+            ->method('isSigned')
+            ->will($this->returnValue(true));
+
+        $tokenMock->expects($this->once())
+            ->method('getSignedUrl')
+            ->will($this->returnValue('https://api.domain.com/v1/me'));
+
+        $accessTokenMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue('foo'));
+
+        $accessTokenMock->expects($this->once())
+            ->method('isExpired')
+            ->will($this->returnValue(false));
+
+        $accessTokenMock->expects($this->once())
+            ->method('isRevoked')
+            ->will($this->returnValue(false));
+
+        $accessTokenMock->expects($this->once())
+            ->method('getClient')
+            ->will($this->returnValue('bar'));
+
+        $accessTokenMock->expects($this->once())
+            ->method('getUsername')
+            ->will($this->returnValue('axel@domain.tld'));
+
+        $accessTokenProviderMock->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('foo'))
+            ->will($this->returnValue($accessTokenMock));
+
+        $clientMock->expects($this->once())
+            ->method('isEnabled')
+            ->will($this->returnValue(true));
+
+        $clientMock->expects($this->once())
+            ->method('isLocked')
+            ->will($this->returnValue(false));
+
+        $clientMock->expects($this->exactly(2))
+            ->method('isSignatureRequired')
+            ->will($this->returnValue(true));
+
+        $clientMock->expects($this->once())
+            ->method('getSecret')
+            ->will($this->returnValue('test'));
+
+        $clientProviderMock->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('bar'))
+            ->will($this->returnValue($clientMock));
+
+        $userProviderMock->expects($this->once())
+            ->method('loadUserByUsername')
+            ->with($this->equalTo('axel@domain.tld'))
+            ->will($this->returnValue($userMock));
+
+        $userCheckerMock->expects($this->once())
+            ->method('checkPreAuth')
+            ->with($this->equalTo($userMock));
+
+        $provider = new OAuth2AuthenticationProvider(
+            $userProviderMock,
+            $userCheckerMock,
+            $accessTokenProviderMock,
+            $clientProviderMock,
+            $signatureMock,
             'API'
         );
 
@@ -503,6 +785,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
     }
 
 
+
     /**
      * @expectedException \Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenNotFoundException
      * @expectedExceptionMessage The access token could not be found.
@@ -514,6 +797,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $accessTokenProviderMock    = $this->getMock('Euskadi31\Component\Security\Storage\AccessTokenProviderInterface');
         $clientProviderMock         = $this->getMock('Euskadi31\Component\Security\Storage\ClientProviderInterface');
         $tokenMock                  = $this->getMock('Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $tokenMock->expects($this->once())
             ->method('getClientId')
@@ -529,6 +813,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
             'API'
         );
 
@@ -543,6 +828,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
         $clientProviderMock         = $this->getMock('Euskadi31\Component\Security\Storage\ClientProviderInterface');
         $tokenMock                  = $this->getMock('Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken');
         $clientMock                 = $this->getMock('Euskadi31\Component\Security\Storage\ClientInterface');
+        $signatureMock              = $this->getMock('Euskadi31\Component\Security\Http\Signature\SignatureInterface');
 
         $tokenMock->expects($this->exactly(2))
             ->method('getClientId')
@@ -566,6 +852,7 @@ class OAuth2AuthenticationProviderTest extends \PHPUnit_Framework_TestCase
             $userCheckerMock,
             $accessTokenProviderMock,
             $clientProviderMock,
+            $signatureMock,
             'API'
         );
 

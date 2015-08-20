@@ -18,8 +18,10 @@ class OAuth2ClientTokenTest extends \PHPUnit_Framework_TestCase
     {
         $token = new OAuth2ClientToken();
         $token->setClientId('foo');
+        $token->setClientSecret('bar');
 
         $this->assertEquals('foo', $token->getClientId());
-        $this->assertEquals('foo', $token->getCredentials());
+        $this->assertEquals('bar', $token->getCredentials());
+        $this->assertEquals('bar', $token->getClientSecret());
     }
 }

@@ -70,6 +70,23 @@ class OAuth2AuthenticationListener implements ListenerInterface
     }
 
     /**
+     * Get signature of request
+     *
+     * @param  Request $request
+     * @return string
+     */
+    protected function getSignature(Request $request)
+    {
+        return $request->headers->get(
+            'x-signature',
+            $request->query->get(
+                'sign',
+                $request->query->get('signature')
+            )
+        );
+    }
+
+    /**
      * Handle Access Token
      *
      * @param  Request $request
@@ -111,6 +128,8 @@ class OAuth2AuthenticationListener implements ListenerInterface
 
         $token = new OAuth2AccessToken();
         $token->setAccessToken($accessToken);
+        $token->setSignature($this->getSignature($request));
+        $token->setSignedUrl($request->getUri());
 
         return $token;
     }
@@ -125,12 +144,18 @@ class OAuth2AuthenticationListener implements ListenerInterface
     {
         $header = $request->headers->get('authorization');
         $clientId = null;
+        $clientSecret = null;
 
         if (!empty($header)) {
             $pos = strpos($header, 'Basic');
 
             if ($pos >= 0) {
-                $clientId = explode(':', base64_decode(substr($header, $pos + 6)))[0];
+                $basic = explode(':', base64_decode(substr($header, $pos + 6)));
+                $clientId = $basic[0];
+
+                if (isset($basic[1])) {
+                    $clientSecret = $basic[1];
+                }
             }
         }
 
@@ -140,6 +165,14 @@ class OAuth2AuthenticationListener implements ListenerInterface
                 $request->request->get(
                     'client_id',
                     $request->query->get('client_id')
+                )
+            );
+
+            $clientSecret = $request->server->get(
+                'PHP_AUTH_PW',
+                $request->request->get(
+                    'client_secret',
+                    $request->query->get('client_secret')
                 )
             );
         }
@@ -154,6 +187,9 @@ class OAuth2AuthenticationListener implements ListenerInterface
 
         $token = new OAuth2ClientToken();
         $token->setClientId($clientId);
+        $token->setClientSecret($clientSecret);
+        $token->setSignature($this->getSignature($request));
+        $token->setSignedUrl($request->getUri());
 
         return $token;
     }

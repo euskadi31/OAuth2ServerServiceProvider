@@ -60,6 +60,13 @@ interface ClientInterface
     public function isLocked();
 
     /**
+     * Check if client required signature
+     *
+     * @return boolean
+     */
+    public function isSignatureRequired();
+
+    /**
      * Get grant type allowd for client
      *
      * @return array

@@ -11,18 +11,21 @@
 namespace Euskadi31\Component\Security\Core\Authentication\Provider;
 
 
-use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\User\UserCheckerInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Euskadi31\Component\Security\Storage\AccessTokenProviderInterface;
-use Euskadi31\Component\Security\Storage\ClientProviderInterface;
-use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenExpiredException;
-use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenNotFoundException;
 use Euskadi31\Component\Security\Core\Authentication\Token\AbstractToken;
 use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken;
 use Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken;
+use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenExpiredException;
+use Euskadi31\Component\Security\Core\Exception\OAuthAccessTokenNotFoundException;
+use Euskadi31\Component\Security\Core\Exception\OAuthInvalidRequestException;
+use Euskadi31\Component\Security\Http\Signature\SignatureInterface;
+use Euskadi31\Component\Security\Storage\AccessTokenProviderInterface;
+use Euskadi31\Component\Security\Storage\ClientInterface;
+use Euskadi31\Component\Security\Storage\ClientProviderInterface;
+use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * OAuth2 Authentication Provider
@@ -52,6 +55,11 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
     protected $clientProvider;
 
     /**
+     * @var \Euskadi31\Component\Security\Http\Signature\SignatureInterface
+     */
+    protected $signature;
+
+    /**
      * @var string
      */
     private $realmName;
@@ -61,6 +69,7 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
      * @param UserCheckerInterface         $userChecker
      * @param AccessTokenProviderInterface $accessTokenProvider
      * @param ClientProviderInterface      $clientProvider
+     * @param SignatureInterface           $signature
      * @param string                       $realmName
      */
     public function __construct(
@@ -68,6 +77,7 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
         UserCheckerInterface $userChecker,
         AccessTokenProviderInterface $accessTokenProvider,
         ClientProviderInterface $clientProvider,
+        SignatureInterface $signature,
         $realmName
     )
     {
@@ -75,6 +85,7 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
         $this->userChecker          = $userChecker;
         $this->accessTokenProvider  = $accessTokenProvider;
         $this->clientProvider       = $clientProvider;
+        $this->signature            = $signature;
         $this->realmName            = $realmName;
     }
 
@@ -136,6 +147,26 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
     }
 
     /**
+     * Check signature
+     *
+     * @param  TokenInterface  $token
+     * @param  ClientInterface $client
+     * @return void
+     */
+    protected function checkSignature(TokenInterface $token, ClientInterface $client)
+    {
+        if ($client->isSignatureRequired() && !$token->isSigned()) {
+            throw new OAuthInvalidRequestException('The request is not signed.');
+        }
+
+        if ($client->isSignatureRequired() && $token->isSigned()) {
+            if (!$this->signature->verify($token->getSignedUrl(), $client->getSecret(), $token->getSignature())) {
+                throw new OAuthInvalidRequestException('The request signature we calculated does not match the signature you provided.');
+            }
+        }
+    }
+
+    /**
      * Authenticate with access token
      *
      * @param  TokenInterface $token
@@ -150,6 +181,8 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
         $client = $this->clientProvider->get($accessToken->getClient());
 
         $this->checkClient($client);
+
+        $this->checkSignature($token, $client);
 
         // check scope
 
@@ -166,13 +199,14 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
             );
         }
 
-        $token = new OAuth2AccessToken($user->getRoles());
-        $token->setAuthenticated(true);
-        $token->setAccessToken($accessToken->getId());
-        $token->setUser($user);
-        $token->setClient($client);
+        $retval = new OAuth2AccessToken($user->getRoles());
+        $retval->setAuthenticated(true);
+        $retval->setAccessToken($accessToken->getId());
+        $retval->setUser($user);
+        $retval->setClient($client);
+        $retval->setSignature($token->getSignature());
 
-        return $token;
+        return $retval;
     }
 
     /**
@@ -187,10 +221,13 @@ class OAuth2AuthenticationProvider implements AuthenticationProviderInterface
 
         $this->checkClient($client);
 
+        $this->checkSignature($token, $client);
+
         $retval = new OAuth2ClientToken([]);
         $retval->setAuthenticated(true);
         $retval->setClientId($token->getClientId());
         $retval->setClient($client);
+        $retval->setSignature($token->getSignature());
 
         return $retval;
     }

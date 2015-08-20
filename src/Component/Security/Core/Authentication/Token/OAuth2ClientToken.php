@@ -23,6 +23,11 @@ class OAuth2ClientToken extends AbstractToken
     protected $clientId;
 
     /**
+     * @var string
+     */
+    protected $clientSecret;
+
+    /**
      * Set client id
      *
      * @param string $clientId
@@ -43,10 +48,30 @@ class OAuth2ClientToken extends AbstractToken
     }
 
     /**
+     * Set client secret
+     *
+     * @param string $clientSecret
+     */
+    public function setClientSecret($clientSecret)
+    {
+        $this->clientSecret = $clientSecret;
+    }
+
+    /**
+     * Get client secret
+     *
+     * @return string
+     */
+    public function getClientSecret()
+    {
+        return $this->clientSecret;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getCredentials()
     {
-        return $this->clientId;
+        return $this->clientSecret;
     }
 }

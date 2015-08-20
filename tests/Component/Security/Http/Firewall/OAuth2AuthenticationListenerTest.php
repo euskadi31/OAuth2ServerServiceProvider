@@ -24,7 +24,15 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $authManagerMock->expects($this->once())
             ->method('authenticate')
             ->with($this->callback(function($arg) {
-                return $arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken;
+                if (!$arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken) {
+                    return false;
+                }
+
+                if ($arg->getSignedUrl() != 'https://api.domain.info/v1/me?access_token=foo') {
+                    return false;
+                }
+
+                return true;
             }));
         $loggerMock         = $this->getMock('Psr\Log\LoggerInterface');
 
@@ -32,7 +40,12 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
 
         $requestMock = $this->getMock('Symfony\Component\HttpFoundation\Request');
         $requestMock->headers = new HeaderBag;
+        $requestMock->query = new ParameterBag;
+        $requestMock->server = new ServerBag;
+        $requestMock->request = new ParameterBag;
         $requestMock->headers->set('authorization', 'Bearer foo');
+        $requestMock->method('getUri')
+            ->will($this->returnValue('https://api.domain.info/v1/me?access_token=foo'));
 
         $getResponseEventMock = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
             ->disableOriginalConstructor()
@@ -50,7 +63,15 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $authManagerMock->expects($this->once())
             ->method('authenticate')
             ->with($this->callback(function($arg) {
-                return $arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken;
+                if (!$arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken) {
+                    return false;
+                }
+
+                if ($arg->getSignedUrl() != 'https://api.domain.info/v1/me?access_token=foo') {
+                    return false;
+                }
+
+                return true;
             }));
         $loggerMock         = $this->getMock('Psr\Log\LoggerInterface');
 
@@ -59,7 +80,11 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $requestMock = $this->getMock('Symfony\Component\HttpFoundation\Request');
         $requestMock->headers = new HeaderBag;
         $requestMock->query = new ParameterBag;
+        $requestMock->server = new ServerBag;
+        $requestMock->request = new ParameterBag;
         $requestMock->query->set('access_token', 'foo');
+        $requestMock->method('getUri')
+            ->will($this->returnValue('https://api.domain.info/v1/me?access_token=foo'));
 
         $getResponseEventMock = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
             ->disableOriginalConstructor()
@@ -77,7 +102,15 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $authManagerMock->expects($this->once())
             ->method('authenticate')
             ->with($this->callback(function($arg) {
-                return $arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken;
+                if (!$arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2AccessToken) {
+                    return false;
+                }
+
+                if ($arg->getSignedUrl() != 'https://api.domain.info/v1/me?access_token=foo') {
+                    return false;
+                }
+
+                return true;
             }));
         $loggerMock         = $this->getMock('Psr\Log\LoggerInterface');
 
@@ -93,6 +126,8 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $requestMock->expects($this->once())
             ->method('getMethod')
             ->will($this->returnValue('POST'));
+        $requestMock->method('getUri')
+            ->will($this->returnValue('https://api.domain.info/v1/me?access_token=foo'));
 
         $getResponseEventMock = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
             ->disableOriginalConstructor()
@@ -110,7 +145,15 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $authManagerMock->expects($this->once())
             ->method('authenticate')
             ->with($this->callback(function($arg) {
-                return $arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken;
+                if (!$arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken) {
+                    return false;
+                }
+
+                if ($arg->getSignedUrl() != 'https://api.domain.info/v1/me?access_token=foo') {
+                    return false;
+                }
+
+                return true;
             }));
         $loggerMock         = $this->getMock('Psr\Log\LoggerInterface');
 
@@ -126,6 +169,51 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $requestMock->expects($this->once())
             ->method('getMethod')
             ->will($this->returnValue('POST'));
+        $requestMock->method('getUri')
+            ->will($this->returnValue('https://api.domain.info/v1/me?access_token=foo'));
+
+        $getResponseEventMock = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $getResponseEventMock->method('getRequest')
+            ->will($this->returnValue($requestMock));
+
+        $listener->handle($getResponseEventMock);
+    }
+
+     public function testAuthenticationByClientIdAndClientSecretInHeader()
+    {
+        $tokenStorageMock   = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
+        $authManagerMock    = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
+        $authManagerMock->expects($this->once())
+            ->method('authenticate')
+            ->with($this->callback(function($arg) {
+                if (!$arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken) {
+                    return false;
+                }
+
+                if ($arg->getSignedUrl() != 'https://api.domain.info/v1/me?access_token=foo') {
+                    return false;
+                }
+
+                return true;
+            }));
+        $loggerMock         = $this->getMock('Psr\Log\LoggerInterface');
+
+        $listener = new OAuth2AuthenticationListener($tokenStorageMock, $authManagerMock, 'Foo', $loggerMock);
+
+        $requestMock = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $requestMock->headers = new HeaderBag;
+        $requestMock->headers->set('Authorization', sprintf('Basic %s', base64_encode('foo:bar')));
+        $requestMock->query = new ParameterBag;
+        $requestMock->server = new ServerBag;
+        $requestMock->server->set('content_type', 'application/x-www-form-urlencoded');
+        $requestMock->request = new ParameterBag;
+        $requestMock->expects($this->once())
+            ->method('getMethod')
+            ->will($this->returnValue('POST'));
+        $requestMock->method('getUri')
+            ->will($this->returnValue('https://api.domain.info/v1/me?access_token=foo'));
 
         $getResponseEventMock = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
             ->disableOriginalConstructor()
@@ -143,7 +231,15 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $authManagerMock->expects($this->once())
             ->method('authenticate')
             ->with($this->callback(function($arg) {
-                return $arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken;
+                if (!$arg instanceof \Euskadi31\Component\Security\Core\Authentication\Token\OAuth2ClientToken) {
+                    return false;
+                }
+
+                if ($arg->getSignedUrl() != 'https://api.domain.info/v1/me?access_token=foo') {
+                    return false;
+                }
+
+                return true;
             }));
         $loggerMock         = $this->getMock('Psr\Log\LoggerInterface');
 
@@ -159,6 +255,8 @@ class OAuth2AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $requestMock->expects($this->once())
             ->method('getMethod')
             ->will($this->returnValue('POST'));
+        $requestMock->method('getUri')
+            ->will($this->returnValue('https://api.domain.info/v1/me?access_token=foo'));
 
         $getResponseEventMock = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
             ->disableOriginalConstructor()

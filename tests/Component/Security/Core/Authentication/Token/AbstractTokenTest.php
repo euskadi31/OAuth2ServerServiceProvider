@@ -22,6 +22,17 @@ class AbstractTokenTest extends \PHPUnit_Framework_TestCase
         $token->setClient($client);
 
         $this->assertEquals($client, $token->getClient());
+        $this->assertFalse($token->isSigned());
+
+        $token->setSignature('bar');
+
+        $this->assertTrue($token->isSigned());
+
+        $this->assertEquals('bar', $token->getSignature());
+
+        $token->setSignedUrl('https://api.domain.com/search?term=foo');
+
+        $this->assertEquals('https://api.domain.com/search?term=foo', $token->getSignedUrl());
     }
 }
 

@@ -26,6 +26,21 @@ abstract class AbstractToken extends BaseToken
     protected $client;
 
     /**
+     * @var boolean
+     */
+    protected $signed = false;
+
+    /**
+     * @var string
+     */
+    protected $signature;
+
+    /**
+     * @var string
+     */
+    protected $signedUrl;
+
+    /**
      * Set client
      *
      * @param ClientInterface $client
@@ -43,5 +58,55 @@ abstract class AbstractToken extends BaseToken
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * Check if request is signed
+     *
+     * @return boolean
+     */
+    public function isSigned()
+    {
+        return !empty($this->signature);
+    }
+
+    /**
+     * Set signature
+     *
+     * @param string $signature
+     */
+    public function setSignature($signature)
+    {
+        $this->signature = $signature;
+    }
+
+    /**
+     * Get signature
+     *
+     * @return string
+     */
+    public function getSignature()
+    {
+        return $this->signature;
+    }
+
+    /**
+     * Set signed url
+     *
+     * @param string $url
+     */
+    public function setSignedUrl($url)
+    {
+        $this->signedUrl = $url;
+    }
+
+    /**
+     * Get signed url
+     *
+     * @return string
+     */
+    public function getSignedUrl()
+    {
+        return $this->signedUrl;
     }
 }
