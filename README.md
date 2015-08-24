@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/euskadi31/OAuth2ServerServiceProvider.svg?branch=master)](https://travis-ci.org/euskadi31/OAuth2ServerServiceProvider)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/060794b2-c8f1-4713-81fa-4aa29494e111/mini.png)](https://insight.sensiolabs.com/projects/060794b2-c8f1-4713-81fa-4aa29494e111)
-
+[![Coverage Status](https://coveralls.io/repos/euskadi31/OAuth2ServerServiceProvider/badge.svg?branch=master&service=github)](https://coveralls.io/github/euskadi31/OAuth2ServerServiceProvider?branch=master)
 
 ## Install
 
