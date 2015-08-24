@@ -11,7 +11,8 @@
         "phpunit/phpunit": "^4.7",
         "leaphub/phpcs-symfony2-standard": "~2.0.1",
         "phpmd/phpmd": "@stable",
-        "symfony/browser-kit": "~2.7"
+        "symfony/browser-kit": "~2.7",
+        "satooshi/php-coveralls": "dev-master"
     },
     "license": "MIT",
     "authors": [
