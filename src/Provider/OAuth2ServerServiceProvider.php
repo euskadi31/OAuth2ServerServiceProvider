@@ -15,6 +15,7 @@ use Pimple\ServiceProviderInterface;
 use LogicException;
 use Euskadi31\Component\Security\Core\Authentication\Provider\OAuth2AuthenticationProvider;
 use Euskadi31\Component\Security\Http\Firewall\OAuth2AuthenticationListener;
+use Euskadi31\Component\Security\Http\EntryPoint\OAuth2AuthenticationEntryPoint;
 use Euskadi31\Component\Security\GrantType;
 use Euskadi31\Component\Security\Http\Signature\DefaultSignature;
 
@@ -122,13 +123,20 @@ class OAuth2ServerServiceProvider implements ServiceProviderInterface
                 );
             };
 
+            $app['security.entry_point.' . $name . '.oauth2'] = function($app) {
+                return new OAuth2AuthenticationEntryPoint(
+                    $app['oauth2.options']['realm_name'],
+                    isset($app['logger']) ? $app['logger'] : null
+                );
+            };
+
             return [
                 // the authentication provider id
                 'security.authentication_provider.' . $name . '.oauth2',
                 // the authentication listener id
                 'security.authentication_listener.' . $name . '.oauth2',
                 // the entry point id
-                null,
+                'security.entry_point.' . $name . '.oauth2',
                 // the position of the listener in the stack
                 'pre_auth'
             ];

@@ -211,7 +211,7 @@ class OAuth2ServerProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             'security.authentication_provider.api.oauth2',
             'security.authentication_listener.api.oauth2',
-            null,
+            'security.entry_point.api.oauth2',
             'pre_auth'
         ], $factory);
 
@@ -234,5 +234,9 @@ class OAuth2ServerProviderTest extends \PHPUnit_Framework_TestCase
         $listener = $app['security.authentication_listener.api.oauth2'];
 
         $this->assertInstanceOf('Euskadi31\Component\Security\Http\Firewall\OAuth2AuthenticationListener', $listener);
+
+        $entryPoint = $app['security.entry_point.api.oauth2'];
+
+        $this->assertInstanceOf('Euskadi31\Component\Security\Http\EntryPoint\OAuth2AuthenticationEntryPoint', $entryPoint);
     }
 }
