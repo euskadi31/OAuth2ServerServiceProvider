@@ -1,8 +1,10 @@
 # Silex OAuth2 Server Service Provider
 
-[![Build Status](https://travis-ci.org/euskadi31/OAuth2ServerServiceProvider.svg?branch=master)](https://travis-ci.org/euskadi31/OAuth2ServerServiceProvider)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/060794b2-c8f1-4713-81fa-4aa29494e111/mini.png)](https://insight.sensiolabs.com/projects/060794b2-c8f1-4713-81fa-4aa29494e111)
-[![Coverage Status](https://coveralls.io/repos/euskadi31/OAuth2ServerServiceProvider/badge.svg?branch=master&service=github)](https://coveralls.io/github/euskadi31/OAuth2ServerServiceProvider?branch=master)
+[![Build Status](https://img.shields.io/travis/euskadi31/OAuth2ServerServiceProvider/master.svg)](https://travis-ci.org/euskadi31/OAuth2ServerServiceProvider)
+[![SensioLabs Insight](https://img.shields.io/sensiolabs/i/060794b2-c8f1-4713-81fa-4aa29494e111.svg)](https://insight.sensiolabs.com/projects/060794b2-c8f1-4713-81fa-4aa29494e111)
+[![Coveralls](https://img.shields.io/coveralls/euskadi31/OAuth2ServerServiceProvider.svg)](https://coveralls.io/github/euskadi31/OAuth2ServerServiceProvider)
+[![HHVM](https://img.shields.io/hhvm/euskadi31/OAuth2ServerServiceProvider.svg)](https://travis-ci.org/euskadi31/OAuth2ServerServiceProvider)
+[![Packagist](https://img.shields.io/packagist/v/euskadi31/oauth2-server-service-provider.svg)](https://packagist.org/packages/euskadi31/oauth2-server-service-provider)
 
 ## Install
 
