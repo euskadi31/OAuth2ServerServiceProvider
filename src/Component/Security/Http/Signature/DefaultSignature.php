@@ -26,8 +26,7 @@ class DefaultSignature implements SignatureInterface
     public function sign($url, $key)
     {
         $endpoint = http_build_url($url, [], HTTP_URL_STRIP_QUERY | HTTP_URL_STRIP_FRAGMENT);
-
-        $params = [];
+        //$params = [];
 
         if (strpos($url, '?') !== false) {
             parse_str(parse_url($url, PHP_URL_QUERY), $params);
